@@ -60,9 +60,6 @@ nav { position:sticky; top:0; z-index:100; height:52px; background:rgba(250,250,
 .btn-primary:hover { background:#333; }
 .btn-secondary { display:inline-flex; align-items:center; padding:10px 20px; background:transparent; color:var(--text-secondary); border:1px solid var(--border); border-radius:var(--r-md); font-size:13px; font-weight:500; text-decoration:none; letter-spacing:-0.01em; transition:all var(--ease-fast); }
 .btn-secondary:hover { border-color:var(--border-strong); color:var(--text-primary); }
-.hero-meta { display:flex; gap:var(--space-8); margin-top:var(--space-8); animation:fadeUp 0.5s ease 0.3s both; }
-.hero-meta-label { font-size:10px; font-family:var(--font-mono); letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:3px; }
-.hero-meta-value { font-size:13px; font-weight:500; color:var(--text-primary); letter-spacing:-0.01em; }
 
 /* DASHBOARD */
 .dashboard-frame { background:var(--bg-surface); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--shadow-lg); overflow:hidden; font-family:var(--font-ui); }
@@ -105,7 +102,7 @@ nav { position:sticky; top:0; z-index:100; height:52px; background:rgba(250,250,
 .marquee-strip { border-top:1px solid var(--border); background:var(--bg-elevated); height:41px; overflow:hidden; display:flex; align-items:center; }
 .marquee-track { display:flex; white-space:nowrap; animation:marquee 30s linear infinite; }
 .marquee-strip:hover .marquee-track { animation-play-state:paused; }
-.marquee-item { display:flex; align-items:center; padding:0 var(--space-5); gap:var(--space-3); }
+.marquee-item { display:flex; align-items:center; padding:0 var(--space-5); gap:var(--space-3); color:#B0AFA9; font-size:11px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.08em; }
 .marquee-item-text { font-size:11px; font-family:var(--font-mono); color:var(--text-tertiary); letter-spacing:0.04em; }
 .marquee-dot { width:3px; height:3px; border-radius:50%; background:var(--border-strong); flex-shrink:0; }
 
@@ -735,12 +732,7 @@ body.loading { overflow:hidden; }
   transform: translateX(-50%);
 }
 
-/* MARQUEE */
-.marquee-strip { border-top:1px solid var(--border); background:var(--bg-elevated); height:41px; overflow:hidden; display:flex; align-items:center; }
-.marquee-track { display:flex; gap:0; animation:marquee 30s linear infinite; white-space:nowrap; }
-.marquee-item { font-size:11px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.08em; color:var(--text-tertiary); padding:0 var(--space-6); white-space:nowrap; }
-.marquee-icon { color:var(--accent); margin-right:var(--space-2); }
-@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
 
 /* APPROACH */
 .approach-section { background:var(--bg-surface); border-bottom:1px solid var(--border); }
@@ -794,12 +786,7 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
 .footer-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); display:flex; justify-content:space-between; align-items:center; }
 .footer-left,.footer-right { font-size:12px; font-family:var(--font-mono); color:rgba(250,250,249,0.3); }
 
-/* MARQUEE */
-.marquee-strip { border-top:1px solid var(--border); background:var(--bg-elevated); height:41px; overflow:hidden; display:flex; align-items:center; }
-.marquee-track { display:flex; animation:marqueeScroll 30s linear infinite; white-space:nowrap; }
-.marquee-item { font-size:11px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.08em; color:var(--text-tertiary); padding:0 var(--space-6); }
-.marquee-icon { color:var(--accent); margin-right:4px; }
-@keyframes marqueeScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
 
 /* APPROACH */
 .approach-section { background:#F7F7F5; border-bottom:1px solid var(--border); }
@@ -1250,22 +1237,7 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
       <div class="hero-actions">
         <a href="#contact" class="btn-primary">Let's talk</a>
         <a href="#work" class="btn-secondary">View my work</a>
-      </div>
-      <div class="hero-meta">
-        <div>
-          <div class="hero-meta-label">Experience</div>
-          <div class="hero-meta-val">8 years</div>
-        </div>
-        <div>
-          <div class="hero-meta-label">Domains</div>
-          <div class="hero-meta-val">6+ industries</div>
-        </div>
-        <div>
-          <div class="hero-meta-label">Currently at</div>
-          <div class="hero-meta-val">Vendavo</div>
-        </div>
-      </div>
-    </div><!-- /hero-left -->
+      </div></div><!-- /hero-left -->
 
     <!-- Noticeboard -->
     <div class="nb-wrap" aria-label="About Hari">
@@ -1350,34 +1322,32 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
 
 <div class="marquee-strip">
   <div class="marquee-track">
-    <div class="marquee-item"><span class="marquee-icon">✦</span> UX Design</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Design Engineering</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Enterprise SaaS</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Pricing Systems</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> CRM</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> HRTech</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Finance</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Pricing</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> EdTech</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> NGO</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> Supply Chain</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Design Systems</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Prototyping</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> User Research</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Figma</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> React</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Outcomes</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Kerala</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> AI Prototyping</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Design Systems</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Visual Design</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> Builder</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> UX Design</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Design Engineering</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> Enterprise SaaS</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Pricing Systems</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> CRM</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> HRTech</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Finance</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Pricing</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> EdTech</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> NGO</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> Supply Chain</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Design Systems</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Prototyping</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> User Research</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Figma</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> React</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Outcomes</div>
-    <div class="marquee-item"><span class="marquee-icon">✦</span> Kerala</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> AI Prototyping</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Design Systems</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Visual Design</div>
     <div class="marquee-item"><span class="marquee-icon">✦</span> Builder</div>
+    <div class="marquee-item"><span class="marquee-icon">✦</span> Enterprise SaaS</div>
   </div>
 </div>
 
@@ -1718,4 +1688,7 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
   var nav = document.querySelector("nav");
   if (nav) {
     window.addEventL
+</html
+
+
 </html>
