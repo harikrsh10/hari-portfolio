@@ -225,290 +225,77 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
 .footer-link:hover { color:rgba(250,250,249,0.6); }
 
 /* LOADER */
-#loader { position:fixed; inset:0; z-index:10000; background:#0F0F0E; display:none; flex-direction:column; align-items:center; justify-content:center; padding:var(--space-8); transition:opacity 0.7s cubic-bezier(0.4,0,0.2,1); }
-#loader.fade-out { opacity:0; pointer-events:none; }
-.loader-inner { max-width:520px; width:100%; text-align:center; }
-.loader-quote { font-family:'Fraunces',Georgia,serif; font-size:clamp(20px,3vw,28px); font-weight:300; font-style:italic; line-height:1.45; letter-spacing:-0.02em; color:rgba(250,250,249,0.92); margin-bottom:var(--space-3); min-height:3em; }
-.loader-quote .word { display:inline-block; opacity:0; transform:translateY(8px); transition:opacity 0.35s ease,transform 0.35s ease; }
-.loader-quote .word.show { opacity:1; transform:translateY(0); }
-.loader-attr { font-family:'Geist Mono',monospace; font-size:11px; letter-spacing:0.08em; color:rgba(250,250,249,0.3); text-transform:uppercase; margin-bottom:var(--space-12); opacity:0; transition:opacity 0.5s ease; }
-.loader-attr.show { opacity:1; }
-.loader-progress-wrap { display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--space-3); }
-.loader-label { font-family:'Geist Mono',monospace; font-size:10px; letter-spacing:0.1em; color:rgba(250,250,249,0.25); text-transform:uppercase; }
-.loader-pct { font-family:'Fraunces',Georgia,serif; font-size:13px; font-weight:400; letter-spacing:-0.02em; color:rgba(250,250,249,0.6); min-width:40px; text-align:right; }
-.loader-track { width:100%; height:1px; background:rgba(250,250,249,0.08); position:relative; overflow:hidden; }
-.loader-fill { position:absolute; top:0; left:0; bottom:0; width:0%; background:rgba(250,250,249,0.4); transition:width 0.05s linear; }
-body.loading { overflow:hidden; }
-
-/* RESPONSIVE */
-@media (max-width:960px) {
-  nav { padding:0 var(--space-5); }
-  .nav-center { display:none; }
-  .hero-inner { grid-template-columns:1fr; padding:0 var(--space-5); gap:var(--space-6); }
-  .hero-left { padding:var(--space-10) 0 0; }
-
-  .approach-inner { grid-template-columns:1fr; padding:var(--space-12) var(--space-5); }
-  .approach-right { grid-template-columns:1fr 1fr; }
-  .case-study { grid-template-columns:1fr; }
-  .case-study.reverse { direction:ltr; }
-  .cs-visual-wrap { min-height:220px; }
-  .about-inner { grid-template-columns:1fr; padding:var(--space-12) var(--space-5); }
-  .about-right { max-width:360px; }
-  .contact-inner { grid-template-columns:1fr; }
-  .contact-right { display:none; }
-  .section-wrap { padding:var(--space-12) var(--space-5); }}
-@media (max-width:600px) {
-  .hero-headline { font-size:34px; }
-  .approach-right { grid-template-columns:1fr; }
-  .cs-data-grid { grid-template-columns:1fr; }
+#loader {
+  position: fixed; inset: 0; z-index: 10000;
+  background: #0F0F0E;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
 }
-/* Placeholder shown while loading */
-.shot-img-wrap::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, #1C1C1A 0%, #2A2A28 100%);
-  z-index: 0;
-}
-.shot-img-wrap::after {
-  content: attr(data-title);
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-family: var(--font-mono);
-  color: rgba(250,250,249,0.2); letter-spacing: 0.04em;
-  z-index: 1; padding: var(--space-4); text-align: center;
+#loader.hidden { opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+
+.loader-inner {
+  width: min(560px, 88vw);
+  display: flex; flex-direction: column;
+  gap: 48px;
 }
 
-.shot-overlay {
-  position: absolute; inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.25s ease;
-  z-index: 3; border-radius: var(--r-lg);
-}
-.shot-card:hover .shot-overlay { opacity: 1; }
-.shot-overlay-text { font-size: 11px; font-family: var(--font-mono); color: white; letter-spacing: 0.06em; }
-
-.shot-label {
-  font-size: 11px; font-family: var(--font-mono);
-  color: rgba(250,250,249,0.35); letter-spacing: 0.02em;
-  margin-top: var(--space-2); padding: 0 2px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+.loader-quote-wrap {
+  display: flex; flex-direction: column; gap: 16px;
+  min-height: 120px;
+  justify-content: flex-end;
 }
 
-/* ============================================
-   SHOT STRIP — cool mesh aurora
-============================================ */
-.shot-strip {
-  position: relative;
-  padding: var(--space-12) 0;
-  overflow: hidden;
-  border-top: 1px solid rgba(31,111,235,0.12);
-  border-bottom: 1px solid rgba(31,111,235,0.12);
+.loader-quote {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 300;
+  color: #FAFAF9;
+  line-height: 1.4;
+  margin: 0;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.loader-attr {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  color: #6B6A67;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+  opacity: 1;
+  transition: opacity 0.4s ease;
 }
 
-/* Animated mesh gradient background */
-.shot-strip-bg {
-  position: absolute;
-  inset: -40%;
-  z-index: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(31,111,235,0.28) 0%, transparent 65%),
-    radial-gradient(ellipse 60% 80% at 80% 20%, rgba(6,182,212,0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 50% at 60% 80%, rgba(99,102,241,0.20) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 70% at 10% 80%, rgba(14,165,233,0.15) 0%, transparent 55%),
-    radial-gradient(ellipse 90% 40% at 90% 60%, rgba(56,189,248,0.12) 0%, transparent 50%);
-  background-color: #F0F4FB;
-  animation: meshDrift 18s ease-in-out infinite alternate;
-  filter: blur(0px);
+.loader-bottom {
+  display: flex; flex-direction: column; gap: 10px;
 }
 
-@keyframes meshDrift {
-  0%   { transform: translate(0%, 0%)    scale(1);    filter: hue-rotate(0deg); }
-  25%  { transform: translate(-3%, 2%)   scale(1.04); filter: hue-rotate(8deg); }
-  50%  { transform: translate(2%, -3%)   scale(1.02); filter: hue-rotate(-6deg); }
-  75%  { transform: translate(-2%, 3%)   scale(1.05); filter: hue-rotate(12deg); }
-  100% { transform: translate(3%, -1%)   scale(1.03); filter: hue-rotate(5deg); }
+.loader-track {
+  width: 100%; height: 1px;
+  background: #2A2A28;
+  position: relative; overflow: hidden;
+}
+.loader-fill {
+  position: absolute; left: 0; top: 0;
+  height: 100%; width: 0%;
+  background: #FAFAF9;
+  transition: width 0.1s linear;
 }
 
-/* Noise texture overlay for depth */
-.shot-strip-noise {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 128px 128px;
-  pointer-events: none;
+.loader-pct-wrap {
+  display: flex; justify-content: space-between; align-items: center;
 }
-
-/* Header */
-.shot-strip-head {
-  position: relative;
-  z-index: 3;
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 0 var(--space-8) var(--space-8);
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+.loader-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px; color: #6B6A67;
+  text-transform: uppercase; letter-spacing: 0.1em;
 }
-.ssh-eyebrow {
-  font-size: 10px; font-family: var(--font-mono);
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(31,111,235,0.6); display: block; margin-bottom: 6px;
+.loader-pct {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px; color: #6B6A67;
+  letter-spacing: 0.05em;
 }
-.ssh-title {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 2.5vw, 30px);
-  font-weight: 300; letter-spacing: -0.03em;
-  color: #111110; line-height: 1.2;
-}
-.ssh-title em { font-style: italic; color: var(--accent); }
-.ssh-link {
-  font-size: 12px; font-family: var(--font-mono);
-  color: rgba(31,111,235,0.6); text-decoration: none;
-  letter-spacing: 0.02em; transition: color var(--ease-fast);
-  padding-bottom: 2px;
-  border-bottom: 1px solid rgba(31,111,235,0.2);
-}
-.ssh-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-/* Row wrapper */
-.sr-wrap {
-  position: relative;
-  z-index: 3;
-  overflow: hidden;
-  margin-bottom: var(--space-4);
-}
-.sr-wrap:last-child { margin-bottom: 0; }
-
-.sr {
-  display: flex;
-  gap: 14px;
-  width: max-content;
-  animation: sr-scroll 70s linear infinite;
-  padding: 4px 0 8px;
-}
-.sr-rev { animation-direction: reverse; }
-.shot-strip:hover .sr { animation-play-state: paused; }
-
-@keyframes sr-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-/* Glass card */
-.sc {
-  flex: 0 0 260px;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-}
-
-.sc-img-wrap {
-  position: relative;
-  width: 260px; height: 196px;
-  border-radius: 18px;
-  overflow: hidden;
-
-  /* Heavy frosted glass */
-  background: rgba(255,255,255,0.52);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-
-  /* Glass border — subtle inner highlight */
-  border: 1px solid rgba(255,255,255,0.75);
-  outline: 1px solid rgba(31,111,235,0.08);
-
-  /* Layered shadow for lift */
-  box-shadow:
-    0 2px 0 rgba(255,255,255,0.8) inset,
-    0 8px 32px rgba(31,111,235,0.10),
-    0 2px 8px rgba(0,0,0,0.06),
-    0 1px 2px rgba(0,0,0,0.04);
-
-  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
-              box-shadow 0.35s cubic-bezier(0.4,0,0.2,1),
-              border-color 0.25s ease;
-}
-
-.sc:hover .sc-img-wrap {
-  transform: translateY(-4px) scale(1.015);
-  box-shadow:
-    0 2px 0 rgba(255,255,255,0.9) inset,
-    0 16px 48px rgba(31,111,235,0.16),
-    0 4px 16px rgba(0,0,0,0.08),
-    0 1px 4px rgba(0,0,0,0.04);
-  border-color: rgba(255,255,255,0.95);
-}
-
-/* Shimmer placeholder */
-.sc-placeholder {
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg,
-    rgba(255,255,255,0.4) 0%,
-    rgba(200,220,255,0.3) 50%,
-    rgba(255,255,255,0.4) 100%);
-  z-index: 0;
-  animation: glassShimmer 2s ease-in-out infinite;
-}
-@keyframes glassShimmer {
-  0%,100% { opacity: 1; }
-  50%      { opacity: 0.5; }
-}
-
-.sc-img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.45s ease, transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  display: block;
-  border-radius: 17px;
-}
-.sc-img.loaded { opacity: 1; }
-.sc:hover .sc-img { transform: scale(1.04); }
-
-/* Hover overlay */
-.sc-hover {
-  position: absolute; inset: 0;
-  background: rgba(31,111,235,0.15);
-  backdrop-filter: blur(2px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.2s ease;
-  z-index: 2; border-radius: 17px;
-}
-.sc:hover .sc-hover { opacity: 1; }
-.sc-hover span {
-  font-size: 10px; font-family: var(--font-mono);
-  color: #fff; letter-spacing: 0.1em; text-transform: uppercase;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  background: rgba(31,111,235,0.7);
-  padding: 6px 14px; border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.3);
-}
-
-/* Label */
-.sc-label {
-  font-size: 11px; font-family: var(--font-mono);
-  color: rgba(17,17,16,0.45); margin-top: 8px; padding: 0 4px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  letter-spacing: 0.02em;
-}
-
-
-/* ============================================
-   NOTICEBOARD
-============================================ */
-.nb-wrap {
-  padding: var(--space-10) 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeUp 0.6s ease 0.35s both;
-}
-
 .nb-board {
   position: relative;
   width: 440px;
@@ -840,9 +627,48 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
 .footer-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); display:flex; justify-content:space-between; align-items:center; }
 .footer-left,.footer-right { font-size:12px; font-family:var(--font-mono); color:rgba(250,250,249,0.3); }
 
-/* Shot strip scroll direction aliases */
-.sr--left { animation-direction: normal; }
-.sr--right { animation-direction: reverse; }
+/* ── SHOT STRIP ─────────────────────────────────────────────────── */
+.shot-strip { padding: 80px 0; background: var(--bg); overflow: hidden; }
+.shot-strip-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--space-8); }
+.shot-strip-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+.shot-strip-title { font-family: var(--font-display); font-size: 28px; font-weight: 400; color: var(--text-primary); margin: 6px 0 0; }
+.shot-strip-link { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); text-decoration: none; letter-spacing: 0.05em; }
+.shot-strip-link:hover { color: var(--text-primary); }
+
+/* Scroll rows */
+.sr {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: scroll-left 30s linear infinite;
+  margin-bottom: 16px;
+}
+.sr:last-child { margin-bottom: 0; }
+.sr:hover { animation-play-state: paused; }
+.sr--left  { animation-direction: normal; }
+.sr--right { animation-direction: reverse; animation-duration: 36s; }
+
+@keyframes scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Shot cards */
+.sc {
+  display: block;
+  flex-shrink: 0;
+  width: 260px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sc:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+.sc-img-wrap { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--bg-elevated); }
+.sc-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sc-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); padding: 10px 12px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── CASE STUDIES — editorial two-panel layout ─────────────────── */
 .work-section { background: var(--bg); padding: var(--space-16) 0; }
@@ -1195,19 +1021,39 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
   margin: 8px 0 4px 0;
 }
 
+.cs-brief-grid--plain .cs-brief-cell {
+  border-right: none;
+  border-bottom: none;
+}
+.cs-brief-grid--plain {
+  border: 1px solid var(--border);
+}
+.cs-brief-grid--plain .cs-brief-cell:nth-child(1),
+.cs-brief-grid--plain .cs-brief-cell:nth-child(2) {
+  border-bottom: 1px solid var(--border);
+}
+.cs-brief-grid--plain .cs-brief-cell:nth-child(1),
+.cs-brief-grid--plain .cs-brief-cell:nth-child(3) {
+  border-right: 1px solid var(--border);
+}
+
 </style>
 </head>
 <body>
 
 <div id="loader">
   <div class="loader-inner">
-    <div class="loader-quote" id="loaderQuote"></div>
-    <div class="loader-attr" id="loaderAttr">— Brian Reed</div>
-    <div class="loader-progress-wrap">
-      <span class="loader-label">Loading</span>
-      <span class="loader-pct"><span id="loaderPct">0</span>%</span>
+    <div class="loader-quote-wrap">
+      <p class="loader-quote" id="loaderQuote"></p>
+      <p class="loader-attr" id="loaderAttr"></p>
     </div>
-    <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+    <div class="loader-bottom">
+      <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+      <div class="loader-pct-wrap">
+        <span class="loader-label">Loading</span>
+        <span class="loader-pct" id="loaderPct">0%</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1443,61 +1289,53 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
 
     <!-- Case Study 2: HRTech Onboarding -->
     <div class="cs-card">
-      <div class="cs-panel-left" style="background:#EDF3EE;">
-        <div class="cs-mock">
-          <div class="cs-ob-header">
-            <span class="cs-ob-title">Onboarding Progress</span>
-            <span class="cs-ob-day">Day 3 of 14</span>
+      <div class="cs-panel-left" style="background:#1A1A18;">
+        <div class="cs-mock" style="align-items:center; justify-content:center; gap:16px;">
+          <!-- DODO pill mode mock -->
+          <div style="background:#F5F0E8; border-radius:999px; padding:8px 20px; display:flex; align-items:center; gap:10px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+            <div style="width:8px;height:8px;border-radius:50%;background:#c8a96e;"></div>
+            <span style="font-family:'Geist Mono',monospace;font-size:13px;color:#1a1a18;letter-spacing:0.02em;">Writing case study</span>
+            <span style="font-family:'Geist Mono',monospace;font-size:13px;color:#999;margin-left:8px;">24:00</span>
           </div>
-          <div class="cs-ob-steps">
-            <div class="cs-ob-step cs-ob-step--done"><span class="cs-ob-icon">✓</span>Personal Info</div>
-            <div class="cs-ob-step cs-ob-step--done"><span class="cs-ob-icon">✓</span>IT Setup</div>
-            <div class="cs-ob-step cs-ob-step--active"><span class="cs-ob-icon">→</span>Compliance Modules</div>
-            <div class="cs-ob-step"><span class="cs-ob-icon">○</span>Team Introduction</div>
-            <div class="cs-ob-step"><span class="cs-ob-icon">○</span>Role Handbook</div>
-          </div>
-          <div class="cs-ob-bar-row">
-            <div class="cs-ob-bar"><div class="cs-ob-bar-fill" style="width:43%"></div></div>
-            <span class="cs-ob-pct">43%</span>
-          </div>
+          <p style="font-family:'Geist Mono',monospace;font-size:10px;color:#555;letter-spacing:0.1em;text-transform:uppercase;text-align:center;">Pill mode · always on top · 110×34px</p>
         </div>
       </div>
       <div class="cs-panel-right">
-        <div>
+        <div class="cs-meta-row">
           <div class="cs-tags">
-            <span class="cs-tag-pill cs-tag-pill--accent">HRTech</span>
-            <span class="cs-tag-company">Confidential client</span>
+            <span class="cs-tag-pill cs-tag-pill--accent">Personal Product</span>
+            <span class="cs-tag-company">Self-initiated · 2025–26</span>
           </div>
         </div>
         <div>
-          <h3 class="cs-card-title">Turning a compliance form into an onboarding experience</h3>
+          <h3 class="cs-card-title">A focus timer that refuses to interrupt you</h3>
         </div>
-        <p class="cs-card-desc">68% of new employees were abandoning mandatory onboarding before completion. The problem wasn't motivation — the system made people feel lost, not guided.</p>
-        <div class="cs-brief-grid">
+        <p class="cs-card-desc">Most timers ask <em>how long?</em> DODO asks <em>what are you working on?</em> Built with Claude Code and Cursor — my first shipped desktop app, designed and engineered end-to-end.</p>
+        <div class="cs-brief-grid cs-brief-grid--plain">
           <div class="cs-brief-cell">
             <span class="cs-brief-label">Problem</span>
-            <span class="cs-brief-value">68% drop-off before compliance completion</span>
+            <span class="cs-brief-value">No lightweight tool to name and track a focus session without breaking flow</span>
           </div>
           <div class="cs-brief-cell">
-            <span class="cs-brief-label">My Role</span>
-            <span class="cs-brief-value">Lead Designer, end-to-end</span>
+            <span class="cs-brief-label">My role</span>
+            <span class="cs-brief-value">Builder — product, design &amp; engineering, solo</span>
           </div>
           <div class="cs-brief-cell">
-            <span class="cs-brief-label">Key Decision</span>
-            <span class="cs-brief-value">Treat it as a journey, not a form</span>
+            <span class="cs-brief-label">Key decision</span>
+            <span class="cs-brief-value">Ship the pill, not the app — presence without attention cost</span>
           </div>
           <div class="cs-brief-cell">
             <span class="cs-brief-label">Outcome</span>
-            <div class="cs-brief-value--metric">4.2×<span>faster completion rate</span></div>
+            <span class="cs-brief-value--metric">90%<span>user retention</span></span>
           </div>
         </div>
         <div class="cs-footer">
           <div class="cs-skill-tags">
-            <span class="cs-skill-tag">Systems thinking</span>
-            <span class="cs-skill-tag">User research</span>
-            <span class="cs-skill-tag">Flows</span>
+            <span class="cs-skill-tag">Design Engineering</span>
+            <span class="cs-skill-tag">Builder</span>
+            <span class="cs-skill-tag">Rust</span>
           </div>
-          <a href="#" class="cs-read-link">Read case study →</a>
+          <a href="dodo-timer-case-study.html" class="cs-read-link">Read case study →</a>
         </div>
       </div>
     </div>
@@ -1641,54 +1479,58 @@ footer { background:var(--bg-inverse); border-top:1px solid rgba(250,250,249,0.0
 </footer>
 <script>
 (function() {
+  var quotes = [
+    { text: "Design is not just what it looks like and feels like. Design is how it works.", attr: "— Steve Jobs" },
+    { text: "Good design is obvious. Great design is transparent.", attr: "— Joe Sparano" },
+    { text: "The details are not the details. They make the design.", attr: "— Charles Eames" },
+    { text: "Design is intelligence made visible.", attr: "— Alina Wheeler" },
+    { text: "Simplicity is the ultimate sophistication.", attr: "— Leonardo da Vinci" },
+    { text: "Every great design begins with an even better story.", attr: "— Lorinda Mamo" }
+  ];
 
-  // Loader: show briefly then dismiss
-  var loader = document.getElementById("loader");
+  var loader  = document.getElementById('loader');
+  var quoteEl = document.getElementById('loaderQuote');
+  var attrEl  = document.getElementById('loaderAttr');
+  var fillEl  = document.getElementById('loaderFill');
+  var pctEl   = document.getElementById('loaderPct');
+
   if (loader) {
-    loader.style.display = "flex";
-    var pctEl  = document.getElementById("loaderPct");
-    var fillEl = document.getElementById("loaderFill");
-    var quotEl = document.getElementById("loaderQuote");
+    loader.style.cssText = 'position:fixed;inset:0;z-index:10000;background:#0F0F0E;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:1;';
+    document.body.style.overflow = 'hidden';
 
-    // Animate quote words
-    var words = ["Good", "design", "is", "honest."];
-    var wi = 0;
-    function nextWord() {
-      if (wi < words.length && quotEl) {
-        var sp = document.createElement("span");
-        sp.textContent = words[wi] + " ";
-        sp.style.opacity = "0";
-        sp.style.display = "inline";
-        quotEl.appendChild(sp);
-        setTimeout(function(el){ el.style.transition="opacity 0.3s"; el.style.opacity="1"; }(sp), 10);
-        wi++;
-        setTimeout(nextWord, 110);
-      }
-    }
-    nextWord();
+    if (quoteEl) quoteEl.innerHTML = quotes[2].text;
+    if (attrEl)  attrEl.innerHTML  = quotes[2].attr;
 
-    // Animate counter
-    var pct = 0;
-    var interval = setInterval(function() {
-      pct = Math.min(100, pct + 5);
-      if (pctEl)  pctEl.textContent  = pct;
-      if (fillEl) fillEl.style.width = pct + "%";
-      if (pct >= 100) {
-        clearInterval(interval);
+    var step = 0;
+    var STEPS = 60;
+    var stepTime = Math.round(2200 / STEPS);
+
+    var timer = setInterval(function() {
+      step++;
+      var pct = Math.min(Math.round((step / STEPS) * 100), 100);
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (pctEl)  pctEl.innerHTML = pct + '%';
+
+      if (step >= STEPS) {
+        clearInterval(timer);
         setTimeout(function() {
-          loader.style.transition = "opacity 0.6s ease";
-          loader.style.opacity    = "0";
-          setTimeout(function() { loader.style.display = "none"; }, 650);
-        }, 200);
+          loader.style.transition = 'opacity 0.5s ease';
+          loader.style.opacity = '0';
+          document.body.style.overflow = '';
+          setTimeout(function() { loader.style.display = 'none'; }, 550);
+        }, 300);
       }
-    }, 28);
+    }, stepTime);
   }
 
-  // Nav shadow
-  var nav = document.querySelector("nav");
+  // Nav shadow on scroll
+  var nav = document.querySelector('nav');
   if (nav) {
-    window.addEventL
-</html
-
-
+    window.addEventListener('scroll', function() {
+      nav.style.boxShadow = window.scrollY > 10 ? '0 1px 0 var(--border)' : 'none';
+    });
+  }
+})();
+</script>
+</body>
 </html>
