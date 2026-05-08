@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DODO Timer — Hari Krishna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* CASE STUDY ROOM = night room.
+   Same type families, same spacing scale as the portfolio (day room).
+   But background, accent, and reading temperature deliberately diverge. */
+:root {
+  /* Night palette */
+  --bg:#0F0F0E;
+  --bg-surface:#171716;
+  --bg-elevated:#1F1F1D;
+  --bg-sunken:#0A0A09;
+  --border:#2A2A28;
+  --border-strong:#3A3A37;
+  --text-primary:#F5F4F0;
+  --text-secondary:#999791;
+  --text-tertiary:#6B6A65;
+  --text-muted:#4A4945;
+
+  /* Lime accent — DODO's original signature, restored */
+  --accent:#E8FF6B;
+  --accent-dim:rgba(232,255,107,0.08);
+  --accent-soft:rgba(232,255,107,0.18);
+  --accent-hover:#F2FF8C;
+
+  /* Shared bones with portfolio */
+  --font-ui:'Geist',system-ui,sans-serif;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-mono:'Geist Mono',monospace;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px;
+  --space-8:32px; --space-10:40px; --space-12:48px; --space-16:64px; --space-20:80px; --space-24:96px;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:24px;
+  --shadow-xs:0 1px 2px rgba(0,0,0,0.3);
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.4),0 2px 4px rgba(0,0,0,0.25);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(0,0,0,0.3);
+  --ease-fast:150ms cubic-bezier(0.4,0,0.2,1);
+  --ease-normal:250ms cubic-bezier(0.4,0,0.2,1);
+  --ease-slow:450ms cubic-bezier(0.4,0,0.2,1);
+  --max-w:1120px;
+  --read-w:680px;
+}
+
+html { font-family:var(--font-ui); color:var(--text-primary); background:var(--bg); -webkit-font-smoothing:antialiased; }
+body { min-height:100vh; }
+::selection { background:var(--accent); color:var(--bg); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.reveal{animation:fadeUp 0.5s ease both}
+
+/* PAGE TRANSITION — cream-to-night entry */
+.page-veil {
+  position:fixed; inset:0; z-index:9999; pointer-events:none;
+  background:#FAFAF9;
+  animation:veil 0.7s cubic-bezier(0.65,0,0.35,1) forwards;
+}
+@keyframes veil {
+  0%   { opacity:1; }
+  60%  { opacity:1; }
+  100% { opacity:0; }
+}
+
+/* NAV — same skeleton as portfolio, night-room palette */
+nav {
+  position:sticky; top:0; z-index:100; height:52px;
+  background:rgba(15,15,14,0.85); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--space-8); transition:box-shadow var(--ease-normal);
+}
+.nav-logo { font-family:var(--font-display); font-size:15px; font-weight:400; letter-spacing:-0.02em; color:var(--text-primary); text-decoration:none; }
+.nav-logo em { font-style:italic; color:var(--accent); }
+.nav-center { display:flex; gap:var(--space-6); }
+.nav-link { font-size:13px; color:var(--text-secondary); text-decoration:none; letter-spacing:-0.01em; transition:color var(--ease-fast); }
+.nav-link:hover { color:var(--text-primary); }
+.nav-back {
+  display:inline-flex; align-items:center; gap:var(--space-2);
+  font-family:var(--font-mono); font-size:12px;
+  color:var(--text-secondary); text-decoration:none; letter-spacing:0.02em;
+  padding:6px 12px; border:1px solid var(--border); border-radius:var(--r-md);
+  transition:all var(--ease-fast);
+}
+.nav-back:hover { color:var(--accent); border-color:var(--accent-soft); background:var(--accent-dim); }
+.nav-back-arrow { transition:transform var(--ease-fast); display:inline-block; }
+.nav-back:hover .nav-back-arrow { transform:translateX(-3px); }
+
+/* BREADCRUMB / SUB-NAV */
+.subnav {
+  border-bottom:1px solid var(--border);
+  padding:var(--space-3) var(--space-8);
+  background:var(--bg-sunken);
+}
+.subnav-inner {
+  max-width:var(--max-w); margin:0 auto;
+  display:flex; align-items:center; gap:var(--space-2);
+  font-family:var(--font-mono); font-size:11px; letter-spacing:0.05em;
+  color:var(--text-tertiary);
+}
+.subnav a { color:var(--text-tertiary); text-decoration:none; transition:color var(--ease-fast); }
+.subnav a:hover { color:var(--accent); }
+.subnav-sep { color:var(--text-muted); }
+.subnav-current { color:var(--text-secondary); }
+
+/* HEADER */
+.cs-header { background:var(--bg); border-bottom:1px solid var(--border); }
+.cs-header-inner { max-width:var(--max-w); margin:0 auto; padding:var(--space-20) var(--space-8) var(--space-16); }
+
+.cs-eyebrow-row { display:flex; align-items:center; gap:var(--space-3); margin-bottom:var(--space-6); animation:fadeUp 0.5s ease 0.05s both; flex-wrap:wrap; }
+.cs-domain-badge {
+  font-size:10px; font-weight:500; padding:4px 10px;
+  background:var(--accent-dim); color:var(--accent);
+  border:1px solid var(--accent-soft); border-radius:100px;
+  letter-spacing:0.06em; text-transform:uppercase;
+  font-family:var(--font-mono);
+}
+.cs-meta-text { font-size:11px; font-family:var(--font-mono); letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); }
+.cs-meta-sep { color:var(--text-muted); }
+
+.cs-headline { font-family:var(--font-display); font-size:clamp(40px,5vw,68px); font-weight:300; line-height:1.06; letter-spacing:-0.03em; color:var(--text-primary); margin-bottom:var(--space-6); animation:fadeUp 0.5s ease 0.1s both; }
+.cs-headline em { font-style:italic; color:var(--accent); }
+
+.cs-subhead { font-size:18px; line-height:1.6; color:var(--text-secondary); max-width:680px; margin-bottom:var(--space-10); animation:fadeUp 0.5s ease 0.15s both; }
+
+.cs-meta-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; animation:fadeUp 0.5s ease 0.2s both; }
+.cs-meta-cell { padding:var(--space-4) var(--space-5); background:var(--bg-surface); }
+.cs-meta-label { font-size:10px; font-family:var(--font-mono); color:var(--text-tertiary); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:5px; }
+.cs-meta-value { font-size:13px; color:var(--text-primary); font-weight:500; letter-spacing:-0.01em; }
+
+/* HERO VISUAL */
+.cs-hero-visual { background:var(--bg-sunken); border-bottom:1px solid var(--border); padding:var(--space-16) 0; }
+.cs-hero-visual-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); }
+.img-ph {
+  background:var(--bg-elevated); border:1px dashed var(--border-strong);
+  border-radius:var(--r-xl); padding:var(--space-20) var(--space-8);
+  text-align:center;
+}
+.img-ph .lbl { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:var(--space-2); }
+.img-ph .hint { font-size:13px; color:var(--text-secondary); }
+.caption { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); margin-top:var(--space-3); letter-spacing:0.04em; text-align:center; }
+
+/* SECTION FRAME */
+.cs-section { background:var(--bg); border-bottom:1px solid var(--border); }
+.cs-section.alt { background:var(--bg-surface); }
+.cs-section-inner { max-width:var(--max-w); margin:0 auto; padding:var(--space-20) var(--space-8); }
+.cs-section-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-10); padding-bottom:var(--space-5); border-bottom:1px solid var(--border); }
+.cs-section-eyebrow-block { display:flex; align-items:center; gap:var(--space-3); }
+.cs-section-num { font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--accent); letter-spacing:0.06em; }
+.cs-section-eyebrow { font-size:10px; font-family:var(--font-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-tertiary); }
+.cs-section-stage { font-size:12px; font-family:var(--font-mono); color:var(--text-tertiary); letter-spacing:0.04em; }
+
+.cs-section-title { font-family:var(--font-display); font-size:clamp(28px,3.4vw,44px); font-weight:300; line-height:1.15; letter-spacing:-0.025em; color:var(--text-primary); margin-bottom:var(--space-6); max-width:var(--read-w); }
+.cs-section-title em { font-style:italic; color:var(--accent); }
+
+.cs-prose { max-width:var(--read-w); }
+.cs-prose .lede { font-size:18px; line-height:1.6; color:var(--text-primary); margin-bottom:var(--space-5); font-weight:400; }
+.cs-prose p { font-size:15px; line-height:1.75; color:var(--text-secondary); margin-bottom:var(--space-4); }
+.cs-prose p strong { color:var(--text-primary); font-weight:500; }
+.cs-prose p em { color:var(--text-primary); font-style:italic; }
+
+/* PULL QUOTE */
+.pull-quote {
+  font-family:var(--font-display); font-size:clamp(22px,2.6vw,30px); font-weight:300; font-style:italic;
+  line-height:1.3; color:var(--text-primary); letter-spacing:-0.02em;
+  padding:var(--space-2) 0 var(--space-2) var(--space-6);
+  border-left:2px solid var(--accent);
+  margin:var(--space-10) 0; max-width:var(--read-w);
+}
+.pull-quote em { color:var(--accent); font-style:italic; }
+
+/* MODE CARDS */
+.mode-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-top:var(--space-8); }
+.mode-card {
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:var(--space-6);
+  transition:all var(--ease-normal);
+}
+.mode-card:hover { border-color:var(--accent-soft); box-shadow:var(--shadow-sm); transform:translateY(-2px); }
+.mode-card .name { font-family:var(--font-display); font-size:24px; font-weight:400; letter-spacing:-0.02em; color:var(--text-primary); margin-bottom:var(--space-1); }
+.mode-card .name em { color:var(--accent); font-style:italic; }
+.mode-card .size { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.06em; margin-bottom:var(--space-3); }
+.mode-card .job { font-size:13px; color:var(--text-secondary); line-height:1.55; }
+
+/* PIVOT */
+.pivot-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:var(--space-8); }
+.pivot-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6); }
+.pivot-card.current { background:var(--accent-dim); border-color:var(--accent-soft); }
+.pivot-card .ver { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; color:var(--text-tertiary); margin-bottom:var(--space-2); text-transform:uppercase; }
+.pivot-card.current .ver { color:var(--accent); }
+.pivot-card .label-name { font-family:var(--font-display); font-size:22px; font-weight:400; letter-spacing:-0.02em; color:var(--text-primary); margin-bottom:var(--space-2); }
+.pivot-card.current .label-name em { color:var(--accent); font-style:italic; }
+.pivot-card .desc { font-size:13px; color:var(--text-secondary); line-height:1.6; }
+
+/* RATIONALE */
+.rationale-list { display:flex; flex-direction:column; gap:0; margin-top:var(--space-8); max-width:var(--read-w); }
+.rat-item { display:grid; grid-template-columns:48px 1fr; gap:var(--space-5); padding:var(--space-6) 0; border-bottom:1px solid var(--border); }
+.rat-item:last-child { border-bottom:none; }
+.rat-num { font-family:var(--font-display); font-size:32px; font-weight:300; color:var(--accent); line-height:1; letter-spacing:-0.04em; padding-top:2px; }
+.rat-num em { font-style:italic; }
+.rat-body h3 { font-family:var(--font-ui); font-size:15px; font-weight:600; color:var(--text-primary); letter-spacing:-0.01em; margin-bottom:var(--space-2); }
+.rat-body p { font-size:14px; color:var(--text-secondary); line-height:1.65; }
+.rat-body p em { color:var(--text-primary); font-style:italic; }
+
+/* CLAUDE PARTNER */
+.claude-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:var(--space-8); margin-bottom:var(--space-6); }
+.claude-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6); }
+.claude-card .role { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:var(--space-3); display:flex; align-items:center; gap:var(--space-2); }
+.claude-card .role-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); }
+.claude-card .role-dot.muted { background:var(--text-tertiary); }
+.claude-card p { font-size:14px; color:var(--text-secondary); line-height:1.65; }
+.claude-card p em { color:var(--text-primary); font-style:italic; }
+
+/* SIGNAL METRICS */
+.signal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; margin-top:var(--space-8); margin-bottom:var(--space-6); }
+.signal-cell { background:var(--bg-elevated); padding:var(--space-8) var(--space-6); }
+.signal-num { font-family:var(--font-display); font-size:56px; font-weight:300; letter-spacing:-0.04em; color:var(--accent); line-height:1; margin-bottom:var(--space-3); }
+.signal-num em { font-style:italic; }
+.signal-lbl { font-size:13px; color:var(--text-secondary); line-height:1.5; }
+.signal-tag { font-family:var(--font-mono); font-size:10px; color:var(--text-tertiary); letter-spacing:0.06em; text-transform:uppercase; margin-top:var(--space-2); }
+
+/* OUTRO CTA */
+.outro-card {
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:var(--space-6) var(--space-8);
+  margin-top:var(--space-8); display:flex; justify-content:space-between; align-items:center;
+  max-width:var(--read-w); transition:border-color var(--ease-fast);
+}
+.outro-card:hover { border-color:var(--accent-soft); }
+.outro-card .lbl { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; }
+.outro-card a { font-family:var(--font-mono); font-size:13px; color:var(--accent); text-decoration:none; letter-spacing:-0.01em; transition:color var(--ease-fast); }
+.outro-card a:hover { color:var(--accent-hover); }
+
+/* PROJECT GALLERY — visual shots strip */
+.gallery {
+  background:var(--bg-sunken); border-bottom:1px solid var(--border);
+  padding:var(--space-20) 0;
+}
+.gallery-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); }
+.gallery-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:var(--space-10); padding-bottom:var(--space-5); border-bottom:1px solid var(--border); gap:var(--space-6); }
+.gallery-title { font-family:var(--font-display); font-size:clamp(28px,3vw,40px); font-weight:300; letter-spacing:-0.025em; color:var(--text-primary); }
+.gallery-title em { color:var(--accent); font-style:italic; }
+.gallery-eyebrow-block { display:flex; align-items:center; gap:var(--space-3); margin-bottom:var(--space-3); }
+.gallery-num { font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:0.06em; }
+.gallery-eyebrow-text { font-family:var(--font-mono); font-size:10px; color:var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; }
+.gallery-stage { font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary); letter-spacing:0.04em; white-space:nowrap; }
+
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(6, 1fr);
+  grid-auto-rows:180px;
+  gap:var(--space-3);
+}
+.shot {
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r-lg); overflow:hidden; position:relative;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:all var(--ease-normal);
+}
+.shot:hover { border-color:var(--accent-soft); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.shot::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.6));
+  opacity:0; transition:opacity var(--ease-normal);
+  pointer-events:none;
+}
+.shot:hover::after { opacity:1; }
+.shot-meta {
+  position:absolute; bottom:var(--space-4); left:var(--space-4); right:var(--space-4);
+  z-index:2; opacity:0; transform:translateY(8px);
+  transition:all var(--ease-normal);
+}
+.shot:hover .shot-meta { opacity:1; transform:translateY(0); }
+.shot-title { font-family:var(--font-display); font-size:16px; font-weight:400; color:var(--text-primary); letter-spacing:-0.01em; margin-bottom:2px; }
+.shot-caption { font-family:var(--font-mono); font-size:10px; color:var(--text-secondary); letter-spacing:0.04em; }
+
+.shot-ph { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; padding:var(--space-4); text-align:center; }
+
+/* Gallery layout: varied sizes */
+.shot.s-wide  { grid-column:span 4; }
+.shot.s-half  { grid-column:span 3; }
+.shot.s-third { grid-column:span 2; }
+.shot.s-tall  { grid-column:span 2; grid-row:span 2; }
+
+/* OTHER WORK */
+.other-work { background:var(--bg); border-bottom:1px solid var(--border); padding:var(--space-20) 0; }
+.other-work-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); }
+.other-work-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:var(--space-10); padding-bottom:var(--space-5); border-bottom:1px solid var(--border); gap:var(--space-6); }
+.other-work-title { font-family:var(--font-display); font-size:clamp(28px,3vw,40px); font-weight:300; letter-spacing:-0.025em; color:var(--text-primary); }
+.other-work-title em { color:var(--accent); font-style:italic; }
+.other-work-meta { font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary); letter-spacing:0.04em; white-space:nowrap; }
+
+.other-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:var(--space-4);
+  margin-bottom:var(--space-8);
+}
+.other-card {
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r-xl); padding:var(--space-8);
+  text-decoration:none; color:inherit;
+  transition:all var(--ease-normal);
+  display:flex; flex-direction:column; gap:var(--space-5);
+  min-height:260px;
+}
+.other-card:hover {
+  border-color:var(--accent-soft);
+  background:var(--bg-surface);
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+}
+.other-card-row { display:flex; align-items:center; gap:var(--space-3); }
+.other-card-badge {
+  font-size:10px; font-family:var(--font-mono);
+  padding:3px 9px; background:var(--accent-dim); color:var(--accent);
+  border:1px solid var(--accent-soft); border-radius:100px;
+  letter-spacing:0.06em; text-transform:uppercase;
+}
+.other-card-company { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.04em; }
+.other-card-title { font-family:var(--font-display); font-size:24px; font-weight:300; line-height:1.25; letter-spacing:-0.02em; color:var(--text-primary); }
+.other-card-title em { color:var(--accent); font-style:italic; }
+.other-card-desc { font-size:13px; line-height:1.65; color:var(--text-secondary); flex:1; }
+.other-card-foot { display:flex; justify-content:space-between; align-items:center; padding-top:var(--space-4); border-top:1px solid var(--border); }
+.other-card-tag { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.04em; }
+.other-card-arrow { font-family:var(--font-mono); font-size:12px; color:var(--accent); letter-spacing:-0.01em; transition:transform var(--ease-fast); }
+.other-card:hover .other-card-arrow { transform:translateX(4px); }
+
+.back-to-all {
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--bg-elevated); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:var(--space-6) var(--space-8);
+  text-decoration:none; transition:all var(--ease-normal);
+}
+.back-to-all:hover { border-color:var(--accent-soft); background:var(--bg-surface); }
+.back-to-all-text { font-family:var(--font-display); font-size:20px; font-weight:300; color:var(--text-primary); letter-spacing:-0.02em; }
+.back-to-all-text em { color:var(--accent); font-style:italic; }
+.back-to-all-arrow { font-family:var(--font-mono); font-size:12px; color:var(--accent); letter-spacing:0.04em; transition:transform var(--ease-fast); }
+.back-to-all:hover .back-to-all-arrow { transform:translateX(4px); }
+
+/* FOOTER */
+footer { background:var(--bg-sunken); border-top:1px solid var(--border); padding:var(--space-8); }
+.footer-inner { max-width:var(--max-w); margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+.footer-left { font-size:12px; color:var(--text-muted); font-family:var(--font-mono); letter-spacing:0.04em; }
+.footer-right { display:flex; gap:var(--space-5); }
+.footer-link { font-size:12px; color:var(--text-muted); text-decoration:none; font-family:var(--font-mono); transition:color var(--ease-fast); letter-spacing:0.04em; }
+.footer-link:hover { color:var(--accent); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .cs-meta-grid { grid-template-columns:repeat(2,1fr); }
+  .mode-grid, .pivot-grid, .claude-grid, .signal-grid { grid-template-columns:1fr; }
+  .gallery-grid { grid-template-columns:repeat(2, 1fr); grid-auto-rows:160px; }
+  .shot.s-wide, .shot.s-half, .shot.s-third, .shot.s-tall { grid-column:span 2; grid-row:span 1; }
+  .other-grid { grid-template-columns:1fr; }
+  .cs-section-inner, .gallery-inner, .other-work-inner { padding-left:var(--space-6); padding-right:var(--space-6); }
+  .gallery, .other-work { padding-top:var(--space-12); padding-bottom:var(--space-12); }
+  .cs-section-inner { padding-top:var(--space-12); padding-bottom:var(--space-12); }
+  .cs-header-inner { padding:var(--space-12) var(--space-6) var(--space-10); }
+  .nav-center { display:none; }
+}
+@media (max-width: 640px) {
+  nav { padding:0 var(--space-5); }
+  .outro-card { flex-direction:column; gap:var(--space-3); align-items:flex-start; }
+  .footer-inner { flex-direction:column; gap:var(--space-3); text-align:center; }
+  .cs-section-header, .gallery-header, .other-work-header { flex-direction:column; gap:var(--space-2); align-items:flex-start; }
+  .back-to-all { flex-direction:column; gap:var(--space-3); align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- entry transition: cream-to-night fade -->
+<div class="page-veil"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Hari <em>Krishna</em></a>
+  <div class="nav-center">
+    <a href="index.html#work" class="nav-link">Work</a>
+    <a href="index.html#about" class="nav-link">About</a>
+    <a href="index.html#contact" class="nav-link">Contact</a>
+  </div>
+  <a href="index.html" class="nav-back"><span class="nav-back-arrow">←</span> Back to home</a>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="subnav">
+  <div class="subnav-inner">
+    <a href="index.html">Home</a>
+    <span class="subnav-sep">/</span>
+    <a href="index.html#work">Work</a>
+    <span class="subnav-sep">/</span>
+    <span class="subnav-current">DODO Timer</span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<section class="cs-header">
+  <div class="cs-header-inner">
+    <div class="cs-eyebrow-row">
+      <span class="cs-domain-badge">Personal Product</span>
+      <span class="cs-meta-text">2025 — Ongoing</span>
+      <span class="cs-meta-sep">·</span>
+      <span class="cs-meta-text">Case Study 01</span>
+    </div>
+
+    <h1 class="cs-headline">A focus widget that <em>refuses</em> to interrupt you.</h1>
+    <p class="cs-subhead">DODO Timer is a desktop tool built end-to-end by a UX designer with Claude as engineering partner. The first thing I shipped that runs on someone else's machine — and proof that taste, not technical depth, is the real bottleneck.</p>
+
+    <div class="cs-meta-grid">
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Role</div>
+        <div class="cs-meta-value">Product, Design, Build</div>
+      </div>
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Stack</div>
+        <div class="cs-meta-value">Tauri · Rust · Claude Code</div>
+      </div>
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Footprint</div>
+        <div class="cs-meta-value">3 modes · &lt;320px wide</div>
+      </div>
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Adoption</div>
+        <div class="cs-meta-value">100% tester retention</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HERO VISUAL -->
+<section class="cs-hero-visual">
+  <div class="cs-hero-visual-inner">
+    <div class="img-ph">
+      <div class="lbl">[ DODO Timer — pill mode in the wild ]</div>
+      <div class="hint">Hero image of the pill sitting quietly in the corner of a real desktop</div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 SPARK -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">01</span>
+        <span class="cs-section-eyebrow">Spark</span>
+      </div>
+      <span class="cs-section-stage">The trigger</span>
+    </div>
+
+    <h2 class="cs-section-title">It started with a <em>LinkedIn scroll</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">Someone posted a concept for a tiny focus widget. I stopped scrolling — I knew the problem, because I'd been losing two-hour blocks to deep work with nothing to pull me back.</p>
+      <p>Existing timers all asked the same wrong question first: <em>how long?</em> I was tired of answering it. The hours never matched what the work actually needed. And every Pomodoro app I'd tried treated my attention like a budget to spend — when what I actually needed was a witness.</p>
+    </div>
+
+    <blockquote class="pull-quote">I closed LinkedIn and opened a terminal.</blockquote>
+  </div>
+</section>
+
+<!-- 02 INSIGHT -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">02</span>
+        <span class="cs-section-eyebrow">Insight</span>
+      </div>
+      <span class="cs-section-stage">Reframe</span>
+    </div>
+
+    <h2 class="cs-section-title">The value isn't the timing. It's the <em>naming</em>.</h2>
+
+    <div class="cs-prose">
+      <p>Every other timer asks <em>how long?</em> first. DODO asks <em>what are you working on?</em> One field. One commitment. The clock is incidental to the ritual.</p>
+      <p>This was the call that changed everything. It cut the feature list in half. It made duration optional, made distraction blocking redundant, and made the rest of the design self-evident — if naming the task is the whole product, then the UI exists to honour that one moment of commitment, then disappear.</p>
+    </div>
+
+    <blockquote class="pull-quote">The real product is the <em>naming</em>, not the clock.</blockquote>
+  </div>
+</section>
+
+<!-- 03 MODES -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">03</span>
+        <span class="cs-section-eyebrow">Modes</span>
+      </div>
+      <span class="cs-section-stage">System</span>
+    </div>
+
+    <h2 class="cs-section-title">Three states, <em>one principle</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">The attention the timer deserves changes across a session. The tool should, too.</p>
+      <p>Setup demands focus. Widget mode lets you check in. Pill mode is where it lives 90% of the time — small enough to ignore, present enough to remember. Each mode is the same product at a different volume.</p>
+    </div>
+
+    <div class="mode-grid">
+      <div class="mode-card">
+        <div class="name"><em>Setup</em></div>
+        <div class="size">260 × 140</div>
+        <div class="job">Micro-commitment ritual. One field, one decision.</div>
+      </div>
+      <div class="mode-card">
+        <div class="name"><em>Widget</em></div>
+        <div class="size">280 × 160</div>
+        <div class="job">Check in, adjust, see progress. The honest middle.</div>
+      </div>
+      <div class="mode-card">
+        <div class="name"><em>Pill</em></div>
+        <div class="size">110 × 34</div>
+        <div class="job">Where it lives 90% of the time. Almost a piece of furniture.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:var(--space-8)">
+      <div class="img-ph">
+        <div class="lbl">[ Three-mode comparison ]</div>
+        <div class="hint">Setup, widget, and pill at relative scale, with state transitions</div>
+      </div>
+      <div class="caption">Double-click collapses. Double-click expands. That's the entire interaction.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 PIVOT -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">04</span>
+        <span class="cs-section-eyebrow">The Pivot</span>
+      </div>
+      <span class="cs-section-stage">Aesthetic call</span>
+    </div>
+
+    <h2 class="cs-section-title">From <em>anime</em> to Dieter Rams.</h2>
+
+    <div class="cs-prose">
+      <p>A focus tool that visually interrupts you is a contradiction. The first version had a dark JRPG aesthetic — fun, but wrong. It was a tool that wanted attention, in a category that should ask for none.</p>
+      <p>The rewrite wasn't a reskin — it was a forcing function that <em>deleted half my features</em>. If the visual language is restraint, then any feature that wants attention has to justify itself loudly, and most couldn't.</p>
+    </div>
+
+    <div class="pivot-grid">
+      <div class="pivot-card">
+        <div class="ver">v1.0</div>
+        <div class="label-name">Anime Timer</div>
+        <div class="desc">Dark, neon orange, JRPG vibe. Fun. Wrong for the category. The kind of thing I'd build to please myself, not the user.</div>
+      </div>
+      <div class="pivot-card current">
+        <div class="ver">v1.1 — Current</div>
+        <div class="label-name"><em>DODO</em></div>
+        <div class="desc">Twemco flip-clock on a Rams desk. Warm off-white. One accent, used three times, max. Built to be ignored, not admired.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:var(--space-8)">
+      <div class="img-ph">
+        <div class="lbl">[ Before / after ]</div>
+        <div class="hint">Side-by-side of v1.0 anime aesthetic and v1.1 Dieter Rams direction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 RATIONALE -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">05</span>
+        <span class="cs-section-eyebrow">Product Rationale</span>
+      </div>
+      <span class="cs-section-stage">Decisions</span>
+    </div>
+
+    <h2 class="cs-section-title">Three calls that <em>mattered</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">Every product is the sum of the things it refused to do. These are the three refusals that make DODO what it is.</p>
+    </div>
+
+    <div class="rationale-list">
+      <div class="rat-item">
+        <div class="rat-num"><em>01</em></div>
+        <div class="rat-body">
+          <h3>Name the task, not the duration</h3>
+          <p>Duration is optional. Most users skip it. The naming is the value — it's the moment of commitment that the rest of the session is held against. Removing the duration prompt felt risky. It wasn't.</p>
+        </div>
+      </div>
+      <div class="rat-item">
+        <div class="rat-num"><em>02</em></div>
+        <div class="rat-body">
+          <h3>Pill is the product, widget is the admin</h3>
+          <p>I built the widget first, then realised the pill <em>is</em> the product. Always-on-top only works if the tool is tiny enough to ignore. The widget became the configuration screen for the pill — not the other way around.</p>
+        </div>
+      </div>
+      <div class="rat-item">
+        <div class="rat-num"><em>03</em></div>
+        <div class="rat-body">
+          <h3>Corner-snap, not free drag</h3>
+          <p>Four corner positions, not infinite placement. Fewer choices, better outcomes. A classic design call — only this time I had to implement it myself, which made the call easier, not harder. Constraints look better in code.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 CLAUDE -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">06</span>
+        <span class="cs-section-eyebrow">Claude as Partner</span>
+      </div>
+      <span class="cs-section-stage">Process</span>
+    </div>
+
+    <h2 class="cs-section-title">Not a tool. A <em>collaborator</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">First thing I've shipped that runs on someone else's machine. Claude didn't write the code <em>for</em> me — it worked <em>with</em> me, the way a good engineering partner would.</p>
+    </div>
+
+    <div class="claude-grid">
+      <div class="claude-card">
+        <div class="role"><span class="role-dot"></span>Claude led</div>
+        <p>Tauri setup, Rust window config, GitHub Actions cross-platform builds. The infrastructure I had no context on — and didn't need to learn from scratch to ship.</p>
+      </div>
+      <div class="claude-card">
+        <div class="role"><span class="role-dot muted"></span>I led</div>
+        <p>Every product decision. What stays, what gets cut, what the thing <em>is</em>. Taste stayed the bottleneck — which is how it should be. The partnership only works if the human is still the editor.</p>
+      </div>
+    </div>
+
+    <div class="cs-prose">
+      <p>The pattern that worked: I'd describe the <em>feeling</em> I wanted — "this should sit on Dieter Rams' desk, not in a video game." Claude translated that into implementation. I reviewed, pushed back, iterated. The loop tightened over weeks; by the end, I was shipping changes in minutes, not days.</p>
+    </div>
+
+    <blockquote class="pull-quote">Claude didn't turn me into an engineer. It removed the <em>excuse</em> not to ship.</blockquote>
+  </div>
+</section>
+
+<!-- 07 SIGNAL -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">07</span>
+        <span class="cs-section-eyebrow">Signal</span>
+      </div>
+      <span class="cs-section-stage">Validation</span>
+    </div>
+
+    <h2 class="cs-section-title">What testers are <em>actually</em> doing.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">Friends describe it as an <em>object</em>, not a productivity tool. That's the signal I care about. People don't uninstall things that feel like objects.</p>
+    </div>
+
+    <div class="signal-grid">
+      <div class="signal-cell">
+        <div class="signal-num">100<em>%</em></div>
+        <div class="signal-lbl">Tester adoption — daily use over multiple weeks of private testing</div>
+        <div class="signal-tag">Private beta</div>
+      </div>
+      <div class="signal-cell">
+        <div class="signal-num">0</div>
+        <div class="signal-lbl">Churn in the testing group. No-one's quietly stopped opening it.</div>
+        <div class="signal-tag">Retention</div>
+      </div>
+      <div class="signal-cell">
+        <div class="signal-num">&lt;1<em>d</em></div>
+        <div class="signal-lbl">Time for testers to find pill mode and make it the default — and never go back</div>
+        <div class="signal-tag">Mode preference</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 OUTRO -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">08</span>
+        <span class="cs-section-eyebrow">What This Was</span>
+      </div>
+      <span class="cs-section-stage">Reflection</span>
+    </div>
+
+    <h2 class="cs-section-title">A timer. Also a case against the idea that <em>designers can't ship</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">DODO is small. The thing it proved is not.</p>
+      <p>Eight years of designing for other people to build. One product I designed and built end-to-end. The gap between Figma and production isn't technical — it's psychological. DODO is the proof I needed that I can close it.</p>
+      <p>Next: session history, streaks, one-click restart. Then a public launch. The tool is small on purpose; the discipline behind it is the part I'm carrying into everything else.</p>
+    </div>
+
+    <div class="outro-card">
+      <span class="lbl">Source code</span>
+      <a href="https://github.com/harikrsh10/dodo-timer" target="_blank" rel="noopener">github.com/harikrsh10/dodo-timer →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 09 GALLERY -->
+<section class="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-header">
+      <div>
+        <div class="gallery-eyebrow-block">
+          <span class="gallery-num">09</span>
+          <span class="gallery-eyebrow-text">Gallery</span>
+        </div>
+        <h2 class="gallery-title">DODO, in <em>frames</em>.</h2>
+      </div>
+      <span class="gallery-stage">8 shots · hover for context</span>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="shot s-tall">
+        <span class="shot-ph">[ Hero — pill in the wild ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Pill mode</div>
+          <div class="shot-caption">Top-right corner · 110 × 34</div>
+        </div>
+      </div>
+      <div class="shot s-wide">
+        <span class="shot-ph">[ Setup screen — full ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">The naming ritual</div>
+          <div class="shot-caption">Setup screen · single field</div>
+        </div>
+      </div>
+      <div class="shot s-third">
+        <span class="shot-ph">[ Widget detail ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Widget mode</div>
+          <div class="shot-caption">280 × 160</div>
+        </div>
+      </div>
+      <div class="shot s-third">
+        <span class="shot-ph">[ Corner snap ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Corner snap UX</div>
+          <div class="shot-caption">Four-position chooser</div>
+        </div>
+      </div>
+      <div class="shot s-third">
+        <span class="shot-ph">[ Flip-clock detail ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Twemco reference</div>
+          <div class="shot-caption">Type and digit treatment</div>
+        </div>
+      </div>
+      <div class="shot s-half">
+        <span class="shot-ph">[ v1.0 vs v1.1 — overlay ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">The pivot, side-by-side</div>
+          <div class="shot-caption">Anime → Rams</div>
+        </div>
+      </div>
+      <div class="shot s-half">
+        <span class="shot-ph">[ Desktop in real life ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Tester's desk, week 3</div>
+          <div class="shot-caption">Photographed in situ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 OTHER WORK -->
+<section class="other-work">
+  <div class="other-work-inner">
+    <div class="other-work-header">
+      <div>
+        <div class="gallery-eyebrow-block">
+          <span class="gallery-num">→</span>
+          <span class="gallery-eyebrow-text">Continue Reading</span>
+        </div>
+        <h2 class="other-work-title">Other <em>work</em>.</h2>
+      </div>
+      <span class="other-work-meta">2 of 5 case studies</span>
+    </div>
+
+    <div class="other-grid">
+      <a href="vendavo-pricing-case-study.html" class="other-card">
+        <div class="other-card-row">
+          <span class="other-card-badge">Pricing</span>
+          <span class="other-card-company">Vendavo · 2024</span>
+        </div>
+        <h3 class="other-card-title">Helping reps trust an <em>AI</em> they didn't ask for.</h3>
+        <p class="other-card-desc">A pricing recommendation engine that 73% of sales reps were ignoring. The redesign closed the trust gap without dumbing down the model.</p>
+        <div class="other-card-foot">
+          <span class="other-card-tag">Enterprise SaaS · B2B</span>
+          <span class="other-card-arrow">Read →</span>
+        </div>
+      </a>
+
+      <a href="hrtech-onboarding-case-study.html" class="other-card">
+        <div class="other-card-row">
+          <span class="other-card-badge">HRTech</span>
+          <span class="other-card-company">Confidential · 2023</span>
+        </div>
+        <h3 class="other-card-title">Onboarding that <em>doesn't</em> feel like paperwork.</h3>
+        <p class="other-card-desc">A new-hire flow rebuilt around emotional milestones, not document checklists. Time-to-productive dropped from 18 days to 11.</p>
+        <div class="other-card-foot">
+          <span class="other-card-tag">HR Tech · Workflow</span>
+          <span class="other-card-arrow">Read →</span>
+        </div>
+      </a>
+    </div>
+
+    <a href="index.html#work" class="back-to-all">
+      <span class="back-to-all-text">See <em>all work</em></span>
+      <span class="back-to-all-arrow">→ Back to portfolio</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-left">Hari Krishna · Design Engineer · Kerala</span>
+    <span class="footer-right">
+      <a href="index.html" class="footer-link">Home</a>
+      <a href="index.html#work" class="footer-link">Work</a>
+      <a href="index.html#about" class="footer-link">About</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
