@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stash — Hari Krishna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Light palette — matches the portfolio home */
+  --bg:#FFFFFF;
+  --bg-surface:#FAFAF8;
+  --bg-elevated:#F5F4F2;
+  --bg-sunken:#F7F6F4;
+  --border:#E6E5E1;
+  --border-strong:#D5D4D0;
+  --text-primary:#111110;
+  --text-secondary:#5A5A56;
+  --text-tertiary:#9A9995;
+  --text-muted:#B8B7B3;
+
+  /* Blue accent — same as home */
+  --accent:#1F6FEB;
+  --accent-dim:rgba(31,111,235,0.08);
+  --accent-soft:rgba(31,111,235,0.20);
+  --accent-hover:#1558C0;
+
+  --font-ui:'Geist',system-ui,sans-serif;
+  --font-display:'Fraunces',Georgia,serif;
+  --font-mono:'Geist Mono',monospace;
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px;
+  --space-8:32px; --space-10:40px; --space-12:48px; --space-16:64px; --space-20:80px; --space-24:96px;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:24px;
+  --shadow-xs:0 1px 2px rgba(0,0,0,0.3);
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.4),0 2px 4px rgba(0,0,0,0.25);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(0,0,0,0.3);
+  --ease-fast:150ms cubic-bezier(0.4,0,0.2,1);
+  --ease-normal:250ms cubic-bezier(0.4,0,0.2,1);
+  --ease-slow:450ms cubic-bezier(0.4,0,0.2,1);
+  --max-w:1120px;
+  --read-w:680px;
+}
+
+html { font-family:var(--font-ui); color:var(--text-primary); background:var(--bg); -webkit-font-smoothing:antialiased; }
+body { min-height:100vh; }
+::selection { background:var(--accent); color:var(--bg); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.reveal{animation:fadeUp 0.5s ease both}
+
+.page-veil {
+  position:fixed; inset:0; z-index:9999; pointer-events:none;
+  background:#FAFAF9;
+  animation:veil 0.7s cubic-bezier(0.65,0,0.35,1) forwards;
+}
+@keyframes veil { 0%{opacity:1} 60%{opacity:1} 100%{opacity:0} }
+
+/* FLOATING GLASS PILL NAV — same as portfolio home */
+.nav-float {
+  position:fixed; top:20px; left:50%; transform:translateX(-50%);
+  z-index:100; display:flex; align-items:center; gap:16px;
+}
+nav {
+  width:auto;
+  display:flex; align-items:center; gap:2px; padding:5px;
+  background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(40px) saturate(200%) brightness(103%);
+  -webkit-backdrop-filter:blur(40px) saturate(200%) brightness(103%);
+  border:1px solid rgba(255,255,255,0.75);
+  border-radius:100px;
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.08),
+    0 1px 3px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 0 -1px 0 rgba(0,0,0,0.03);
+}
+.nav-pill-link {
+  font-size:12px; font-weight:500; letter-spacing:0.03em; text-transform:uppercase;
+  color:rgba(0,0,0,0.45); text-decoration:none;
+  padding:7px 18px; border-radius:100px;
+  transition:all var(--ease-fast);
+}
+.nav-pill-link:hover { color:rgba(0,0,0,0.75); background:rgba(255,255,255,0.5); }
+.nav-pill-link.active {
+  color:#111110; background:#fff;
+  box-shadow:0 1px 6px rgba(0,0,0,0.12), 0 0.5px 1.5px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1);
+}
+.nav-contact-pill {
+  width:44px; height:44px; border-radius:100px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(40px) saturate(200%) brightness(103%);
+  -webkit-backdrop-filter:blur(40px) saturate(200%) brightness(103%);
+  border:1px solid rgba(255,255,255,0.75);
+  box-shadow:
+    0 4px 24px rgba(0,0,0,0.08),
+    0 1px 3px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.95),
+    inset 0 -1px 0 rgba(0,0,0,0.03);
+  color:rgba(0,0,0,0.5); text-decoration:none;
+  transition:all var(--ease-fast);
+}
+.nav-contact-pill:hover { color:rgba(0,0,0,0.85); transform:translateY(-1px); }
+.nav-back-pill { gap:8px; width:auto; padding:0 16px; font-family:var(--font-ui); font-size:12px; font-weight:500; letter-spacing:0.03em; text-transform:uppercase; color:rgba(0,0,0,0.45); }
+.nav-back-pill:hover { color:rgba(0,0,0,0.85); }
+.nav-back-pill .nav-back-arrow { transition:transform var(--ease-fast); display:inline-flex; }
+.nav-back-pill:hover .nav-back-arrow { transform:translateX(-3px); }
+
+.cs-header { background:var(--bg); border-bottom:1px solid var(--border); }
+.cs-header-inner { max-width:var(--max-w); margin:0 auto; padding:var(--space-20) var(--space-8) var(--space-16); }
+.cs-eyebrow-row { display:flex; align-items:center; gap:var(--space-3); margin-bottom:var(--space-6); animation:fadeUp 0.5s ease 0.05s both; flex-wrap:wrap; }
+.cs-domain-badge { font-size:10px; font-weight:500; padding:4px 10px; background:var(--accent-dim); color:var(--accent); border:1px solid var(--accent-soft); border-radius:100px; letter-spacing:0.06em; text-transform:uppercase; font-family:var(--font-mono); }
+.cs-meta-text { font-size:11px; font-family:var(--font-mono); letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); }
+.cs-meta-sep { color:var(--text-muted); }
+.cs-headline { font-family:var(--font-display); font-size:clamp(40px,5vw,68px); font-weight:300; line-height:1.06; letter-spacing:-0.03em; color:var(--text-primary); margin-bottom:var(--space-6); animation:fadeUp 0.5s ease 0.1s both; }
+.cs-headline em { font-style:italic; color:var(--accent); }
+.cs-subhead { font-size:18px; line-height:1.6; color:var(--text-secondary); max-width:680px; margin-bottom:var(--space-10); animation:fadeUp 0.5s ease 0.15s both; }
+.cs-meta-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; animation:fadeUp 0.5s ease 0.2s both; }
+.cs-meta-cell { padding:var(--space-4) var(--space-5); background:var(--bg-surface); }
+.cs-meta-label { font-size:10px; font-family:var(--font-mono); color:var(--text-tertiary); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:5px; }
+.cs-meta-value { font-size:13px; color:var(--text-primary); font-weight:500; letter-spacing:-0.01em; }
+
+.cs-hero-visual { background:var(--bg-sunken); border-bottom:1px solid var(--border); padding:var(--space-16) 0; }
+.cs-hero-visual-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); }
+.cs-hero-img { width:100%; border-radius:var(--r-xl); border:1px solid var(--border); display:block; }
+.img-ph { background:var(--bg-elevated); border:1px dashed var(--border-strong); border-radius:var(--r-xl); padding:var(--space-20) var(--space-8); text-align:center; }
+.img-ph .lbl { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:var(--space-2); }
+.img-ph .hint { font-size:13px; color:var(--text-secondary); }
+.caption { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); margin-top:var(--space-3); letter-spacing:0.04em; text-align:center; }
+
+.cs-section { background:var(--bg); border-bottom:1px solid var(--border); }
+.cs-section.alt { background:var(--bg-surface); }
+.cs-section-inner { max-width:var(--max-w); margin:0 auto; padding:var(--space-20) var(--space-8); }
+.cs-section-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:var(--space-10); padding-bottom:var(--space-5); border-bottom:1px solid var(--border); }
+.cs-section-eyebrow-block { display:flex; align-items:center; gap:var(--space-3); }
+.cs-section-num { font-family:var(--font-mono); font-size:11px; font-weight:500; color:var(--accent); letter-spacing:0.06em; }
+.cs-section-eyebrow { font-size:10px; font-family:var(--font-mono); letter-spacing:0.1em; text-transform:uppercase; color:var(--text-tertiary); }
+.cs-section-stage { font-size:12px; font-family:var(--font-mono); color:var(--text-tertiary); letter-spacing:0.04em; }
+.cs-section-title { font-family:var(--font-display); font-size:clamp(28px,3.4vw,44px); font-weight:300; line-height:1.15; letter-spacing:-0.025em; color:var(--text-primary); margin-bottom:var(--space-6); max-width:var(--read-w); }
+.cs-section-title em { font-style:italic; color:var(--accent); }
+.cs-prose { max-width:var(--read-w); }
+.cs-prose .lede { font-size:18px; line-height:1.6; color:var(--text-primary); margin-bottom:var(--space-5); font-weight:400; }
+.cs-prose p { font-size:15px; line-height:1.75; color:var(--text-secondary); margin-bottom:var(--space-4); }
+.cs-prose p strong { color:var(--text-primary); font-weight:500; }
+.cs-prose p em { color:var(--text-primary); font-style:italic; }
+
+.pull-quote { font-family:var(--font-display); font-size:clamp(22px,2.6vw,30px); font-weight:300; font-style:italic; line-height:1.3; color:var(--text-primary); letter-spacing:-0.02em; padding:var(--space-2) 0 var(--space-2) var(--space-6); border-left:2px solid var(--accent); margin:var(--space-10) 0; max-width:var(--read-w); }
+.pull-quote em { color:var(--accent); font-style:italic; }
+
+.mode-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-4); margin-top:var(--space-8); }
+.mode-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6); transition:all var(--ease-normal); }
+.mode-card:hover { border-color:var(--accent-soft); box-shadow:var(--shadow-sm); transform:translateY(-2px); }
+.mode-card .name { font-family:var(--font-display); font-size:24px; font-weight:400; letter-spacing:-0.02em; color:var(--text-primary); margin-bottom:var(--space-1); }
+.mode-card .name em { color:var(--accent); font-style:italic; }
+.mode-card .size { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.06em; margin-bottom:var(--space-3); }
+.mode-card .job { font-size:13px; color:var(--text-secondary); line-height:1.55; }
+
+.rationale-list { display:flex; flex-direction:column; gap:0; margin-top:var(--space-8); max-width:var(--read-w); }
+.rat-item { display:grid; grid-template-columns:48px 1fr; gap:var(--space-5); padding:var(--space-6) 0; border-bottom:1px solid var(--border); }
+.rat-item:last-child { border-bottom:none; }
+.rat-num { font-family:var(--font-display); font-size:32px; font-weight:300; color:var(--accent); line-height:1; letter-spacing:-0.04em; padding-top:2px; }
+.rat-num em { font-style:italic; }
+.rat-body h3 { font-family:var(--font-ui); font-size:15px; font-weight:600; color:var(--text-primary); letter-spacing:-0.01em; margin-bottom:var(--space-2); }
+.rat-body p { font-size:14px; color:var(--text-secondary); line-height:1.65; }
+.rat-body p em { color:var(--text-primary); font-style:italic; }
+
+.signal-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; margin-top:var(--space-8); margin-bottom:var(--space-6); }
+.signal-cell { background:var(--bg-elevated); padding:var(--space-8) var(--space-6); }
+.signal-num { font-family:var(--font-display); font-size:56px; font-weight:300; letter-spacing:-0.04em; color:var(--accent); line-height:1; margin-bottom:var(--space-3); }
+.signal-num em { font-style:italic; }
+.signal-lbl { font-size:13px; color:var(--text-secondary); line-height:1.5; }
+.signal-tag { font-family:var(--font-mono); font-size:10px; color:var(--text-tertiary); letter-spacing:0.06em; text-transform:uppercase; margin-top:var(--space-2); }
+
+/* INSIGHT MAPPING — finding → principle */
+.insight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); margin-top:var(--space-8); }
+.insight-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6); display:flex; flex-direction:column; transition:all var(--ease-normal); }
+.insight-card:hover { border-color:var(--accent-soft); box-shadow:var(--shadow-sm); transform:translateY(-2px); }
+.insight-ev-label, .insight-pr-label { font-family:var(--font-mono); font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-tertiary); display:block; margin-bottom:var(--space-2); }
+.insight-stat { font-family:var(--font-display); font-size:40px; font-weight:300; letter-spacing:-0.03em; color:var(--text-primary); line-height:1; margin-bottom:var(--space-2); }
+.insight-stat span { font-size:18px; }
+.insight-ev-text { font-size:13px; line-height:1.5; color:var(--text-secondary); }
+.insight-connector { display:flex; align-items:center; gap:var(--space-3); margin:var(--space-5) 0; }
+.insight-connector .line { flex:1; height:1px; background:var(--border); }
+.insight-connector .dot { color:var(--accent); font-size:16px; line-height:1; }
+.insight-pr-label { color:var(--accent); }
+.insight-pr-text { font-family:var(--font-display); font-size:19px; font-weight:300; line-height:1.3; letter-spacing:-0.01em; color:var(--text-primary); }
+.insight-pr-text em { font-style:italic; color:var(--accent); }
+@media (max-width:900px){ .insight-grid { grid-template-columns:1fr; } }
+
+.outro-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6) var(--space-8); margin-top:var(--space-8); display:flex; justify-content:space-between; align-items:center; max-width:var(--read-w); transition:border-color var(--ease-fast); }
+.outro-card:hover { border-color:var(--accent-soft); }
+.outro-card .lbl { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; }
+.outro-card a { font-family:var(--font-mono); font-size:13px; color:var(--accent); text-decoration:none; letter-spacing:-0.01em; transition:color var(--ease-fast); }
+.outro-card a:hover { color:var(--accent-hover); }
+
+.gallery { background:var(--bg-sunken); border-bottom:1px solid var(--border); padding:var(--space-20) 0; }
+.gallery-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); }
+.gallery-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:var(--space-10); padding-bottom:var(--space-5); border-bottom:1px solid var(--border); gap:var(--space-6); }
+.gallery-title { font-family:var(--font-display); font-size:clamp(28px,3vw,40px); font-weight:300; letter-spacing:-0.025em; color:var(--text-primary); }
+.gallery-title em { color:var(--accent); font-style:italic; }
+.gallery-eyebrow-block { display:flex; align-items:center; gap:var(--space-3); margin-bottom:var(--space-3); }
+.gallery-num { font-family:var(--font-mono); font-size:11px; color:var(--accent); letter-spacing:0.06em; }
+.gallery-eyebrow-text { font-family:var(--font-mono); font-size:10px; color:var(--text-tertiary); letter-spacing:0.1em; text-transform:uppercase; }
+.gallery-stage { font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary); letter-spacing:0.04em; white-space:nowrap; }
+.gallery-grid { display:grid; grid-template-columns:repeat(6, 1fr); grid-auto-rows:180px; gap:var(--space-3); }
+.shot { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; position:relative; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all var(--ease-normal); }
+.shot:hover { border-color:var(--accent-soft); transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.shot::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.6)); opacity:0; transition:opacity var(--ease-normal); pointer-events:none; }
+.shot:hover::after { opacity:1; }
+.shot-meta { position:absolute; bottom:var(--space-4); left:var(--space-4); right:var(--space-4); z-index:2; opacity:0; transform:translateY(8px); transition:all var(--ease-normal); }
+.shot:hover .shot-meta { opacity:1; transform:translateY(0); }
+.shot-title { font-family:var(--font-display); font-size:16px; font-weight:400; color:var(--text-primary); letter-spacing:-0.01em; margin-bottom:2px; }
+.shot-caption { font-family:var(--font-mono); font-size:10px; color:var(--text-secondary); letter-spacing:0.04em; }
+.shot-ph { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); letter-spacing:0.08em; text-transform:uppercase; padding:var(--space-4); text-align:center; }
+.shot.s-wide  { grid-column:span 4; }
+.shot.s-half  { grid-column:span 3; }
+.shot.s-third { grid-column:span 2; }
+.shot.s-tall  { grid-column:span 2; grid-row:span 2; }
+
+.other-work { background:var(--bg); border-bottom:1px solid var(--border); padding:var(--space-20) 0; }
+.other-work-inner { max-width:var(--max-w); margin:0 auto; padding:0 var(--space-8); }
+.other-work-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:var(--space-10); padding-bottom:var(--space-5); border-bottom:1px solid var(--border); gap:var(--space-6); }
+.other-work-title { font-family:var(--font-display); font-size:clamp(28px,3vw,40px); font-weight:300; letter-spacing:-0.025em; color:var(--text-primary); }
+.other-work-title em { color:var(--accent); font-style:italic; }
+.other-work-meta { font-family:var(--font-mono); font-size:12px; color:var(--text-tertiary); letter-spacing:0.04em; white-space:nowrap; }
+.other-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-bottom:var(--space-8); }
+.other-card { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-xl); padding:var(--space-8); text-decoration:none; color:inherit; transition:all var(--ease-normal); display:flex; flex-direction:column; gap:var(--space-5); min-height:260px; }
+.other-card:hover { border-color:var(--accent-soft); background:var(--bg-surface); transform:translateY(-3px); box-shadow:var(--shadow-md); }
+.other-card-row { display:flex; align-items:center; gap:var(--space-3); }
+.other-card-badge { font-size:10px; font-family:var(--font-mono); padding:3px 9px; background:var(--accent-dim); color:var(--accent); border:1px solid var(--accent-soft); border-radius:100px; letter-spacing:0.06em; text-transform:uppercase; }
+.other-card-company { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.04em; }
+.other-card-title { font-family:var(--font-display); font-size:24px; font-weight:300; line-height:1.25; letter-spacing:-0.02em; color:var(--text-primary); }
+.other-card-title em { color:var(--accent); font-style:italic; }
+.other-card-desc { font-size:13px; line-height:1.65; color:var(--text-secondary); flex:1; }
+.other-card-foot { display:flex; justify-content:space-between; align-items:center; padding-top:var(--space-4); border-top:1px solid var(--border); }
+.other-card-tag { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); letter-spacing:0.04em; }
+.other-card-arrow { font-family:var(--font-mono); font-size:12px; color:var(--accent); letter-spacing:-0.01em; transition:transform var(--ease-fast); }
+.other-card:hover .other-card-arrow { transform:translateX(4px); }
+.back-to-all { display:flex; align-items:center; justify-content:space-between; background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6) var(--space-8); text-decoration:none; transition:all var(--ease-normal); }
+.back-to-all:hover { border-color:var(--accent-soft); background:var(--bg-surface); }
+.back-to-all-text { font-family:var(--font-display); font-size:20px; font-weight:300; color:var(--text-primary); letter-spacing:-0.02em; }
+.back-to-all-text em { color:var(--accent); font-style:italic; }
+.back-to-all-arrow { font-family:var(--font-mono); font-size:12px; color:var(--accent); letter-spacing:0.04em; transition:transform var(--ease-fast); }
+.back-to-all:hover .back-to-all-arrow { transform:translateX(4px); }
+
+footer { background:var(--bg-sunken); border-top:1px solid var(--border); padding:var(--space-8); }
+.footer-inner { max-width:var(--max-w); margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+.footer-left { font-size:12px; color:var(--text-muted); font-family:var(--font-mono); letter-spacing:0.04em; }
+.footer-right { display:flex; gap:var(--space-5); }
+.footer-link { font-size:12px; color:var(--text-muted); text-decoration:none; font-family:var(--font-mono); transition:color var(--ease-fast); letter-spacing:0.04em; }
+.footer-link:hover { color:var(--accent); }
+
+@media (max-width: 900px) {
+  .cs-meta-grid { grid-template-columns:repeat(2,1fr); }
+  .mode-grid, .signal-grid { grid-template-columns:1fr; }
+  .gallery-grid { grid-template-columns:repeat(2, 1fr); grid-auto-rows:160px; }
+  .shot.s-wide, .shot.s-half, .shot.s-third, .shot.s-tall { grid-column:span 2; grid-row:span 1; }
+  .other-grid { grid-template-columns:1fr; }
+  .cs-section-inner, .gallery-inner, .other-work-inner { padding-left:var(--space-6); padding-right:var(--space-6); }
+  .gallery, .other-work { padding-top:var(--space-12); padding-bottom:var(--space-12); }
+  .cs-section-inner { padding-top:var(--space-12); padding-bottom:var(--space-12); }
+  .cs-header-inner { padding:var(--space-12) var(--space-6) var(--space-10); }
+  .nav-center { display:none; }
+}
+@media (max-width: 640px) {
+  nav { padding:0 var(--space-5); }
+  .outro-card { flex-direction:column; gap:var(--space-3); align-items:flex-start; }
+  .footer-inner { flex-direction:column; gap:var(--space-3); text-align:center; }
+  .cs-section-header, .gallery-header, .other-work-header { flex-direction:column; gap:var(--space-2); align-items:flex-start; }
+  .back-to-all { flex-direction:column; gap:var(--space-3); align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-veil"></div>
+
+<!-- FLOATING NAV — same as home, plus back-to-home -->
+<div class="nav-float">
+  <a href="index.html" class="nav-contact-pill" aria-label="Back to home"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></a>
+  <nav>
+    <a href="index.html" class="nav-pill-link">Home</a>
+    <a href="index.html#work" class="nav-pill-link">Work</a>
+    <a href="index.html#about" class="nav-pill-link">About</a>
+  </nav>
+  <a href="mailto:harikrsh10@gmail.com" class="nav-contact-pill" aria-label="Contact">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m2 7 10 7 10-7"></path></svg>
+  </a>
+  <a href="/resume.pdf" target="_blank" class="nav-contact-pill" aria-label="Resume">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+  </a>
+</div>
+
+<!-- HEADER -->
+<section class="cs-header">
+  <div class="cs-header-inner">
+    <div class="cs-eyebrow-row">
+      <span class="cs-domain-badge">Personal Product</span>
+      <span class="cs-meta-text">2025 — Ongoing</span>
+      <span class="cs-meta-sep">·</span>
+      <span class="cs-meta-text">Case Study 02</span>
+    </div>
+
+    <h1 class="cs-headline">A clipboard that finally <em>remembers</em>.</h1>
+    <p class="cs-subhead">Stash is a desktop clipboard manager I designed and built end-to-end. It keeps everything you copy and lets you drag any past clip straight back into the app you're working in — Notion, VS Code, Figma, or the AI tool you keep feeding reference images to.</p>
+
+    <div class="cs-meta-grid">
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Role</div>
+        <div class="cs-meta-value">Product, Design, Build</div>
+      </div>
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Stack</div>
+        <div class="cs-meta-value">Electron · Claude Code</div>
+      </div>
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Platforms</div>
+        <div class="cs-meta-value">macOS · Windows · Linux</div>
+      </div>
+      <div class="cs-meta-cell">
+        <div class="cs-meta-label">Footprint</div>
+        <div class="cs-meta-value">Menu bar · 100-item memory</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HERO VISUAL -->
+<section class="cs-hero-visual">
+  <div class="cs-hero-visual-inner">
+    <video class="cs-hero-img" autoplay muted loop playsinline poster="/stash-cover.png">
+      <source src="/Stash%20Demo.mp4" type="video/mp4"/>
+    </video>
+    <div class="caption">Stash lives in the tray. One copy, kept. Drag it back out into anything.</div>
+  </div>
+</section>
+
+<!-- 01 THE USERS -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">01</span>
+        <span class="cs-section-eyebrow">The Users</span>
+      </div>
+      <span class="cs-section-stage">Who this is for</span>
+    </div>
+
+    <h2 class="cs-section-title">Two people, stuck in the <em>same loop</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">Stash isn't for everyone who copies and pastes. It's for two kinds of people who do it relentlessly, in bursts, with images — and pay for it every time.</p>
+      <p>I kept seeing the same behaviour in designers deep in an exploration phase, and in the new wave of builders working alongside AI. Different tools, identical friction: collect a pile of references, then feed them somewhere, one painful round-trip at a time.</p>
+    </div>
+
+    <div class="mode-grid">
+      <div class="mode-card">
+        <div class="name">The <em>explorer</em></div>
+        <div class="size">Designers · inspiration phase</div>
+        <div class="job">Hunting references across Pinterest, mobile, Dribbble, a dozen tabs. For a single board they'll pull tens of images — and want them all in one spot, not scattered behind back-and-forth copying.</div>
+      </div>
+      <div class="mode-card">
+        <div class="name">The <em>AI builder</em></div>
+        <div class="size">Working with AI · vision-led</div>
+        <div class="job">Showing an AI their direction with reference images, prompts and snippets — on every iteration. They need to reuse the same set fast, without leaving the context or re-uploading files each time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 THE FRICTION -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">02</span>
+        <span class="cs-section-eyebrow">The Friction</span>
+      </div>
+      <span class="cs-section-stage">The problem</span>
+    </div>
+
+    <h2 class="cs-section-title">You copy all day. Your computer remembers <em>one thing</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">The system clipboard is a single slot. Copy a second thing and the first is gone — no warning, no recall. For the way these two users work, that one slot is the bottleneck.</p>
+      <p>For the explorer, every new reference erases the last. So gathering ten images becomes ten interruptions — copy, switch, paste, switch back, find your place again. The flow of looking dies the moment you try to keep anything.</p>
+      <p>For the AI builder it's worse, because images and prompts get reused. Re-upload the same reference. Re-type the prompt you liked. Dig through Downloads for the file you saved three messages ago. The cost isn't one paste — it's the same paste, over and over, pulling you out of the very context where the thinking happens.</p>
+    </div>
+
+    <blockquote class="pull-quote">A clipboard isn't a slot. It should be a <em>place</em> you can pull from.</blockquote>
+
+    <div style="margin-top:var(--space-10)">
+      <video class="cs-hero-img" autoplay muted loop playsinline>
+        <source src="/Before%20stash.mp4" type="video/mp4"/>
+      </video>
+      <div class="caption">Before Stash — collecting inspiration meant a constant copy → switch → paste loop, one reference at a time.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 VALIDATION -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">03</span>
+        <span class="cs-section-eyebrow">Validation</span>
+      </div>
+      <span class="cs-section-stage">Proving it was real</span>
+    </div>
+
+    <h2 class="cs-section-title">I didn't trust my own <em>itch</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">A personal annoyance isn't a problem worth building for. Before writing a line of code, I validated it on both sides — a survey for breadth, one-on-one interviews for depth.</p>
+    </div>
+
+    <div class="signal-grid">
+      <div class="signal-cell">
+        <div class="signal-num">66<span style="font-size:24px;">%</span></div>
+        <div class="signal-lbl">Said copied items get buried under newer copies during work</div>
+        <div class="signal-tag">Survey · SurveyMonkey</div>
+      </div>
+      <div class="signal-cell">
+        <div class="signal-num">70<span style="font-size:24px;">%+</span></div>
+        <div class="signal-lbl">Found quick drag-out and a recorded clip history relatable and much-needed</div>
+        <div class="signal-tag">Feature validation</div>
+      </div>
+      <div class="signal-cell">
+        <div class="signal-num">8</div>
+        <div class="signal-lbl">Designers and builders in scripted one-on-one interviews</div>
+        <div class="signal-tag">Qualitative depth</div>
+      </div>
+    </div>
+
+    <div class="cs-prose">
+      <p><strong>Quantitative.</strong> I ran a survey to pressure-test the pain points and use cases. Around <em>66%</em> said copied items routinely get buried the moment they copy something newer, and the recurring theme was context switching — losing the thread of what they'd copied as they moved between tools. When I tested the proposed solutions, more than <em>70%</em> said quick drag-and-drop of clips into their core apps, plus a recorded history of what they'd copied, were features they related to and badly wanted. Designers and builders alike were losing real time to this switching, and were open to trying something that fixed it.</p>
+      <p><strong>Qualitative.</strong> I then interviewed <em>8 users</em> — a mix of designers and builders — one on one, working from a planned script to understand how a solution would actually slot into their day. That's where the most important constraint surfaced: this couldn't be <em>another app</em>. A new place to manage would just add the context switching they were trying to escape. It had to disappear into the workflow they already had.</p>
+    </div>
+
+    <blockquote class="pull-quote">The users didn't want a new app. They wanted the <em>switching</em> to stop.</blockquote>
+  </div>
+</section>
+
+<!-- 04 THE INSIGHT -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">04</span>
+        <span class="cs-section-eyebrow">The Insight</span>
+      </div>
+      <span class="cs-section-stage">Reframe</span>
+    </div>
+
+    <h2 class="cs-section-title">Three findings, three <em>design principles</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">The research didn't just confirm a problem — it pointed at exactly what the product had to be. Each finding mapped cleanly onto a principle I refused to compromise.</p>
+    </div>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <span class="insight-ev-label">What we heard</span>
+        <div class="insight-stat">66<span>%</span></div>
+        <p class="insight-ev-text">Clips get buried under newer copies — the pain is finding and re-using, not storing.</p>
+        <div class="insight-connector"><span class="dot">◆</span><span class="line"></span></div>
+        <span class="insight-pr-label">So the principle is</span>
+        <p class="insight-pr-text">Build for <em>retrieval</em>, not memory. One drag out — no re-copy, switch, paste.</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="insight-ev-label">What we heard</span>
+        <div class="insight-stat">70<span>%+</span></div>
+        <p class="insight-ev-text">Want to drag clips — text and reference images — straight into their core tools.</p>
+        <div class="insight-connector"><span class="dot">◆</span><span class="line"></span></div>
+        <span class="insight-pr-label">So the principle is</span>
+        <p class="insight-pr-text">The clip lands where the <em>cursor already is</em> — Figma, an AI prompt, a canvas.</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="insight-ev-label">What we heard</span>
+        <div class="insight-stat">8<span>/8</span></div>
+        <p class="insight-ev-text">Interviewees pushed back on "another app" — a new place to manage means more switching.</p>
+        <div class="insight-connector"><span class="dot">◆</span><span class="line"></span></div>
+        <span class="insight-pr-label">So the principle is</span>
+        <p class="insight-pr-text">Live <em>inside</em> the workflow. Stay in the tray, invisible until summoned.</p>
+      </div>
+    </div>
+
+    <blockquote class="pull-quote">If you have to copy it again to use it, the history never saved you anything.</blockquote>
+  </div>
+</section>
+
+<!-- 05 THE SOLUTION -->
+<section class="cs-section">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">05</span>
+        <span class="cs-section-eyebrow">The Solution</span>
+      </div>
+      <span class="cs-section-stage">What I built</span>
+    </div>
+
+    <h2 class="cs-section-title">A place your clips live, and a way to <em>drag them out</em>.</h2>
+
+    <div class="cs-prose">
+      <p class="lede">Stash keeps everything you copy — text, code, URLs, and crucially <em>images</em> — and gives you two ways back in, split by intent.</p>
+      <p>The Drawer is for when you're looking: full height, searchable, filterable, the place to gather a session's worth of references and pin the keepers. The Dock is for when you already know: a tiny popover at your cursor with the last five clips, gone the moment you've grabbed one. From either, you drag straight into the app you're working in.</p>
+    </div>
+
+    <div class="mode-grid">
+      <div class="mode-card">
+        <div class="name"><em>Drawer</em></div>
+        <div class="size">⌘⇧V · full panel</div>
+        <div class="job">Slides in from the right. Search, filter by type, pin, delete. Where the explorer assembles a whole board of references.</div>
+      </div>
+      <div class="mode-card">
+        <div class="name"><em>Dock</em></div>
+        <div class="size">⌘⇧Space · popover</div>
+        <div class="job">Pops at your cursor with the last five clips. For the AI builder re-feeding the same references mid-flow, then it disappears.</div>
+      </div>
+    </div>
+
+    <div class="rationale-list">
+      <div class="rat-item">
+        <div class="rat-num">01</div>
+        <div class="rat-body">
+          <h3>Native OS drag-out, images included</h3>
+          <p>The hard path technically, but the only one that felt invisible. Electron's <em>webContents.startDrag</em> hands the OS a real file drop — so a reference image lands in Figma or an AI tool as an actual image, not a workaround. This is the feature the whole product is built to deliver.</p>
+        </div>
+      </div>
+      <div class="rat-item">
+        <div class="rat-num">02</div>
+        <div class="rat-body">
+          <h3>Memory-only by default</h3>
+          <p>A clipboard sees passwords, tokens, private messages. So nothing unpinned ever touches disk — quit the app and your history is genuinely gone. Only items you explicitly pin (★) persist. Privacy isn't a setting here; it's the architecture.</p>
+        </div>
+      </div>
+      <div class="rat-item">
+        <div class="rat-num">03</div>
+        <div class="rat-body">
+          <h3>Silently skip secrets</h3>
+          <p>Stash detects and drops API keys, JWTs, AWS keys, OTP codes, and Luhn-validated card numbers before they enter history — tuned hard against false positives, so a normal URL or snippet is never blocked. The safest clip is the one that was never stored.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 IMPACT -->
+<section class="cs-section alt">
+  <div class="cs-section-inner">
+    <div class="cs-section-header">
+      <div class="cs-section-eyebrow-block">
+        <span class="cs-section-num">06</span>
+        <span class="cs-section-eyebrow">Impact</span>
+      </div>
+      <span class="cs-section-stage">What changed</span>
+    </div>
+
+    <h2 class="cs-section-title">The round-trip <em>disappeared</em>.</h2>
+
+    <div class="signal-grid">
+      <div class="signal-cell">
+        <div class="signal-num">3<span style="font-size:24px;"> steps</span></div>
+        <div class="signal-lbl">Re-copy → switch → paste collapsed into a single drag</div>
+        <div class="signal-tag">→ 1 action</div>
+      </div>
+      <div class="signal-cell">
+        <div class="signal-num">0</div>
+        <div class="signal-lbl">Re-uploads to feed the same reference back to an AI tool</div>
+        <div class="signal-tag">Drag, don't re-fetch</div>
+      </div>
+      <div class="signal-cell">
+        <div class="signal-num">3<span style="font-size:24px;"> OS</span></div>
+        <div class="signal-lbl">Shipped to macOS, Windows and Linux from one codebase</div>
+        <div class="signal-tag">Live · open source</div>
+      </div>
+    </div>
+
+    <div class="cs-prose">
+      <p>For the explorer, gathering a board of references stopped breaking their flow — clips collect in one place and drag out when they're ready. For the AI builder, the same set of references and prompts is one drag away on every iteration, no file picker, no leaving the conversation.</p>
+      <p>Stash is live, open source, and the second product I've shipped that runs on someone else's machine. It started as a clearly-stated problem for two real users — and ended as the everyday tool I built to solve it, owned end to end from the insight to the installer.</p>
+    </div>
+
+    <blockquote class="pull-quote">A designer can own the whole thing — the research, the call, and the <em>build</em>.</blockquote>
+
+    <div class="outro-card">
+      <span class="lbl">Source code</span>
+      <a href="https://github.com/harikrsh10/Stash" target="_blank" rel="noopener">github.com/harikrsh10/Stash →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 GALLERY -->
+<section class="gallery">
+  <div class="gallery-inner">
+    <div class="gallery-header">
+      <div>
+        <div class="gallery-eyebrow-block">
+          <span class="gallery-num">07</span>
+          <span class="gallery-eyebrow-text">Gallery</span>
+        </div>
+        <h2 class="gallery-title">Stash, in <em>frames</em>.</h2>
+      </div>
+      <span class="gallery-stage">6 shots · hover for context</span>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="shot s-tall">
+        <span class="shot-ph">[ Drawer — full history ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">The Drawer</div>
+          <div class="shot-caption">⌘⇧V · search, filter, pin</div>
+        </div>
+      </div>
+      <div class="shot s-wide">
+        <span class="shot-ph">[ Drag-out into Notion ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Native drag-out</div>
+          <div class="shot-caption">Clip → any app, no re-copy</div>
+        </div>
+      </div>
+      <div class="shot s-third">
+        <span class="shot-ph">[ Dock popover ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">The Dock</div>
+          <div class="shot-caption">Last 5 at your cursor</div>
+        </div>
+      </div>
+      <div class="shot s-third">
+        <span class="shot-ph">[ Pinned section ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Pinned clips</div>
+          <div class="shot-caption">The only thing on disk</div>
+        </div>
+      </div>
+      <div class="shot s-third">
+        <span class="shot-ph">[ Secret skipped ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Secret detection</div>
+          <div class="shot-caption">Green pulse · never stored</div>
+        </div>
+      </div>
+      <div class="shot s-half">
+        <span class="shot-ph">[ Tray menu ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Lives in the tray</div>
+          <div class="shot-caption">Pause, clear, toggle</div>
+        </div>
+      </div>
+      <div class="shot s-half">
+        <span class="shot-ph">[ Paused state ]</span>
+        <div class="shot-meta">
+          <div class="shot-title">Pause capture</div>
+          <div class="shot-caption">For sensitive copying</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 OTHER WORK -->
+<section class="other-work">
+  <div class="other-work-inner">
+    <div class="other-work-header">
+      <div>
+        <div class="gallery-eyebrow-block">
+          <span class="gallery-num">→</span>
+          <span class="gallery-eyebrow-text">Continue Reading</span>
+        </div>
+        <h2 class="other-work-title">Other <em>work</em>.</h2>
+      </div>
+      <span class="other-work-meta">More case studies</span>
+    </div>
+
+    <div class="other-grid">
+      <a href="index.html#work" class="other-card">
+        <div class="other-card-row">
+          <span class="other-card-badge">Pricing</span>
+          <span class="other-card-company">Vendavo · 2024</span>
+        </div>
+        <h3 class="other-card-title">Making price recommendations <em>trustworthy</em> enough to follow.</h3>
+        <p class="other-card-desc">Sales reps were overriding 73% of system price recommendations — not because the prices were wrong, but because the system gave them no reason to trust it.</p>
+        <div class="other-card-foot">
+          <span class="other-card-tag">Enterprise SaaS · B2B</span>
+          <span class="other-card-arrow">Read →</span>
+        </div>
+      </a>
+
+      <a href="dodo-timer-case-study.html" class="other-card">
+        <div class="other-card-row">
+          <span class="other-card-badge">Personal Product</span>
+          <span class="other-card-company">Self-initiated · 2025</span>
+        </div>
+        <h3 class="other-card-title">A focus timer that <em>refuses</em> to interrupt you.</h3>
+        <p class="other-card-desc">Most timers ask how long. DODO asks what you're working on. My first shipped desktop app, designed and engineered end-to-end.</p>
+        <div class="other-card-foot">
+          <span class="other-card-tag">Design Engineering</span>
+          <span class="other-card-arrow">Read →</span>
+        </div>
+      </a>
+    </div>
+
+    <a href="index.html#work" class="back-to-all">
+      <span class="back-to-all-text">See <em>all work</em></span>
+      <span class="back-to-all-arrow">→ Back to portfolio</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-left">Hari Krishna · Design Engineer · Kerala</span>
+    <span class="footer-right">
+      <a href="index.html" class="footer-link">Home</a>
+      <a href="index.html#work" class="footer-link">Work</a>
+      <a href="index.html#about" class="footer-link">About</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
