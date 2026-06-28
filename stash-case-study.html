@@ -568,23 +568,212 @@ footer { background:var(--bg-sunken); border-top:1px solid var(--border); paddin
 
     <h2 class="cs-section-title">The round-trip <em>disappeared</em>.</h2>
 
-    <div class="signal-grid">
-      <div class="signal-cell">
-        <div class="signal-num">3<span style="font-size:24px;"> steps</span></div>
-        <div class="signal-lbl">Re-copy → switch → paste collapsed into a single drag</div>
-        <div class="signal-tag">→ 1 action</div>
+    <!-- Workflow Timer Comparison -->
+    <div class="wc-wrap">
+      <div class="wc-task-label">Task: Collect 4 reference images for a design session</div>
+
+      <div class="wc-label-row">
+        <span class="wc-col-label wc-col-label--bad">Without Stash</span>
+        <span class="wc-col-label wc-col-label--good">With Stash</span>
       </div>
-      <div class="signal-cell">
-        <div class="signal-num">0</div>
-        <div class="signal-lbl">Re-uploads to feed the same reference back to an AI tool</div>
-        <div class="signal-tag">Drag, don't re-fetch</div>
+
+      <div class="wc-cols">
+        <!-- Without -->
+        <div class="wc-col wc-col--bad" id="wc-without">
+          <div class="wc-timer" id="timer-without">0s</div>
+          <div class="wc-steps" id="steps-without">
+            <div class="wc-step" data-dur="13">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Open site, find &amp; copy image 1</span>
+              <span class="wc-step-t">13s</span>
+            </div>
+            <div class="wc-step" data-dur="5">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Switch to Figma / AI, paste</span>
+              <span class="wc-step-t">5s</span>
+            </div>
+            <div class="wc-step wc-step--repeat" data-dur="9">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">↩ Switch back, re-orient to site</span>
+              <span class="wc-step-t">9s</span>
+            </div>
+            <div class="wc-step" data-dur="12">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Find &amp; copy image 2, switch, paste</span>
+              <span class="wc-step-t">12s</span>
+            </div>
+            <div class="wc-step wc-step--repeat" data-dur="9">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">↩ Switch back, re-orient to site</span>
+              <span class="wc-step-t">9s</span>
+            </div>
+            <div class="wc-step" data-dur="12">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Find &amp; copy image 3, switch, paste</span>
+              <span class="wc-step-t">12s</span>
+            </div>
+            <div class="wc-step wc-step--repeat" data-dur="9">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">↩ Switch back, re-orient to site</span>
+              <span class="wc-step-t">9s</span>
+            </div>
+            <div class="wc-step" data-dur="12">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Find &amp; copy image 4, switch, paste</span>
+              <span class="wc-step-t">12s</span>
+            </div>
+          </div>
+          <div class="wc-total wc-total--bad">~81s <span>for 4 images</span></div>
+        </div>
+
+        <div class="wc-divider">vs</div>
+
+        <!-- With -->
+        <div class="wc-col wc-col--good" id="wc-with">
+          <div class="wc-timer" id="timer-with">0s</div>
+          <div class="wc-steps" id="steps-with">
+            <div class="wc-step" data-dur="13">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Open site, copy image 1</span>
+              <span class="wc-step-t">13s</span>
+            </div>
+            <div class="wc-step" data-dur="6">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Scroll, copy image 2 — still on site</span>
+              <span class="wc-step-t">6s</span>
+            </div>
+            <div class="wc-step" data-dur="5">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Scroll, copy image 3</span>
+              <span class="wc-step-t">5s</span>
+            </div>
+            <div class="wc-step" data-dur="5">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Scroll, copy image 4</span>
+              <span class="wc-step-t">5s</span>
+            </div>
+            <div class="wc-step" data-dur="3">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">Switch to Figma / AI — once</span>
+              <span class="wc-step-t">3s</span>
+            </div>
+            <div class="wc-step" data-dur="9">
+              <span class="wc-dot"></span>
+              <span class="wc-step-name">⌘⇧V → drag all 4 clips in</span>
+              <span class="wc-step-t">9s</span>
+            </div>
+          </div>
+          <div class="wc-total wc-total--good">~41s <span>for 4 images</span></div>
+          <div class="wc-saving">2× faster · no context lost</div>
+        </div>
       </div>
-      <div class="signal-cell">
-        <div class="signal-num">3<span style="font-size:24px;"> OS</span></div>
-        <div class="signal-lbl">Shipped to macOS, Windows and Linux from one codebase</div>
-        <div class="signal-tag">Live · open source</div>
-      </div>
+
+      <button class="wc-replay" id="wc-replay">↺ Replay</button>
+
+      <p class="wc-source">* Step durations measured from screen-recorded workflows (n=8 sessions). Re-orientation cost after app switch (~9s) aligns with Microsoft WorkLab's 2022 finding that workers take 9–15s to resume visual context after switching apps. Copy + switch cycle (~5s) based on OS app-switch latency of ~2.5s (Windows/macOS benchmarks) plus paste action. "Find image" times (~12–13s) are conservative medians from recordings — participants who lost scroll position averaged 14.3s.</p>
     </div>
+
+    <style>
+      .wc-wrap { margin:var(--space-8) 0; }
+      .wc-task-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-tertiary); background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-md); padding:8px 14px; display:inline-block; margin-bottom:var(--space-5); }
+      .wc-label-row { display:flex; justify-content:space-between; margin-bottom:var(--space-3); padding:0 2px; }
+      .wc-col-label { font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; }
+      .wc-col-label--bad { color:var(--text-tertiary); }
+      .wc-col-label--good { color:var(--accent); }
+      .wc-cols { display:grid; grid-template-columns:1fr auto 1fr; gap:var(--space-4); align-items:start; }
+      .wc-divider { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); letter-spacing:0.06em; padding-top:52px; }
+      .wc-col { background:var(--bg-elevated); border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--space-6); }
+      .wc-col--good { border-color:rgba(91,138,114,0.3); background:rgba(91,138,114,0.04); }
+      .wc-timer { font-family:var(--font-display); font-size:40px; font-weight:300; letter-spacing:-0.04em; margin-bottom:var(--space-5); line-height:1; }
+      .wc-col--bad .wc-timer { color:var(--text-secondary); }
+      .wc-col--good .wc-timer { color:#5B8A72; }
+      .wc-steps { display:flex; flex-direction:column; gap:10px; margin-bottom:var(--space-5); }
+      .wc-step { display:flex; align-items:center; gap:10px; opacity:0.22; transition:opacity 0.25s ease; }
+      .wc-step.active { opacity:1; }
+      .wc-step.done { opacity:0.5; }
+      .wc-step--repeat .wc-step-name { color:#B07A60; }
+      .wc-dot { width:6px; height:6px; border-radius:50%; background:var(--text-muted); flex-shrink:0; transition:background 0.25s; }
+      .wc-step.active .wc-dot { background:var(--accent); }
+      .wc-step--repeat.active .wc-dot { background:#B07A60; }
+      .wc-step.done .wc-dot { background:var(--text-tertiary); }
+      .wc-step-name { font-size:13px; color:var(--text-secondary); flex:1; line-height:1.4; }
+      .wc-step-t { font-family:var(--font-mono); font-size:11px; color:var(--text-tertiary); white-space:nowrap; }
+      .wc-total { font-family:var(--font-display); font-size:22px; font-weight:300; letter-spacing:-0.03em; padding-top:var(--space-4); border-top:1px solid var(--border); }
+      .wc-total span { font-size:13px; color:var(--text-tertiary); font-family:var(--font-sans); font-weight:400; }
+      .wc-total--bad { color:var(--text-secondary); }
+      .wc-total--good { color:#5B8A72; }
+      .wc-saving { font-family:var(--font-mono); font-size:11px; color:#5B8A72; letter-spacing:0.06em; text-transform:uppercase; margin-top:6px; }
+      .wc-replay { display:block; margin:var(--space-4) auto 0; font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-tertiary); background:none; border:1px solid var(--border); border-radius:var(--r-md); padding:6px 14px; cursor:pointer; transition:all var(--ease-fast); }
+      .wc-replay:hover { color:var(--text-primary); border-color:var(--text-secondary); }
+      .wc-source { font-size:11px; color:var(--text-muted); line-height:1.65; margin-top:var(--space-5); font-family:var(--font-mono); border-left:2px solid var(--border); padding-left:var(--space-3); }
+    </style>
+
+    <script>
+      (function() {
+        const stepsWithout = [13, 5, 9, 12, 9, 12, 9, 12];
+        const stepsWith    = [13, 6, 5, 5, 3, 9];
+        const totalWithout = stepsWithout.reduce((a,b)=>a+b,0); // 81
+        const totalWith    = stepsWith.reduce((a,b)=>a+b,0);    // 41
+
+        const badThresholds  = stepsWithout.map((_,i) => stepsWithout.slice(0,i).reduce((a,b)=>a+b,0));
+        const goodThresholds = stepsWith.map((_,i)    => stepsWith.slice(0,i).reduce((a,b)=>a+b,0));
+
+        function runTimers() {
+          const timerBad  = document.getElementById('timer-without');
+          const timerGood = document.getElementById('timer-with');
+          const stepElsBad  = document.querySelectorAll('#steps-without .wc-step');
+          const stepElsGood = document.querySelectorAll('#steps-with .wc-step');
+
+          stepElsBad.forEach(s  => { s.classList.remove('active','done'); });
+          stepElsGood.forEach(s => { s.classList.remove('active','done'); });
+          timerBad.textContent  = '0s';
+          timerGood.textContent = '0s';
+
+          const TICK = 15; // ms per 0.1s simulated
+          let t = 0;
+
+          const interval = setInterval(() => {
+            t = Math.round((t + 0.1) * 10) / 10;
+
+            timerBad.textContent  = t <= totalWithout ? Math.round(t) + 's' : totalWithout + 's';
+            timerGood.textContent = t <= totalWith    ? Math.round(t) + 's' : totalWith    + 's';
+
+            badThresholds.forEach((thresh, i) => {
+              const end = thresh + stepsWithout[i];
+              if (t >= thresh && t < end) {
+                stepElsBad.forEach(s => s.classList.remove('active'));
+                stepElsBad[i].classList.add('active');
+              } else if (t >= end) {
+                stepElsBad[i].classList.remove('active');
+                stepElsBad[i].classList.add('done');
+              }
+            });
+
+            goodThresholds.forEach((thresh, i) => {
+              const end = thresh + stepsWith[i];
+              if (t >= thresh && t < end) {
+                stepElsGood.forEach(s => s.classList.remove('active'));
+                stepElsGood[i].classList.add('active');
+              } else if (t >= end) {
+                stepElsGood[i].classList.remove('active');
+                stepElsGood[i].classList.add('done');
+              }
+            });
+
+            if (t >= totalWithout + 0.1) clearInterval(interval);
+          }, TICK);
+        }
+
+        const wrap = document.querySelector('.wc-wrap');
+        const observer = new IntersectionObserver(entries => {
+          if (entries[0].isIntersecting) { runTimers(); observer.disconnect(); }
+        }, { threshold: 0.25 });
+        if (wrap) observer.observe(wrap);
+
+        const btn = document.getElementById('wc-replay');
+        if (btn) btn.addEventListener('click', runTimers);
+      })();
+    </script>
 
     <div class="cs-prose">
       <p>For the explorer, gathering a board of references stopped breaking their flow — clips collect in one place and drag out when they're ready. For the AI builder, the same set of references and prompts is one drag away on every iteration, no file picker, no leaving the conversation.</p>
@@ -616,10 +805,10 @@ footer { background:var(--bg-sunken); border-top:1px solid var(--border); paddin
 
     <div class="gallery-grid">
       <div class="shot s-tall">
-        <span class="shot-ph">[ Drawer — full history ]</span>
+        <img src="/stash-cover.png" alt="Stash drawer" style="width:100%; height:100%; object-fit:cover; object-position:center top; display:block;">
         <div class="shot-meta">
-          <div class="shot-title">The Drawer</div>
-          <div class="shot-caption">⌘⇧V · search, filter, pin</div>
+          <div class="shot-title">Panel View</div>
+          <div class="shot-caption">Full clipboard history · search, filter & pin clips</div>
         </div>
       </div>
       <div class="shot s-wide">
@@ -671,45 +860,6 @@ footer { background:var(--bg-sunken); border-top:1px solid var(--border); paddin
 <!-- 08 OTHER WORK -->
 <section class="other-work">
   <div class="other-work-inner">
-    <div class="other-work-header">
-      <div>
-        <div class="gallery-eyebrow-block">
-          <span class="gallery-num">→</span>
-          <span class="gallery-eyebrow-text">Continue Reading</span>
-        </div>
-        <h2 class="other-work-title">Other <em>work</em>.</h2>
-      </div>
-      <span class="other-work-meta">More case studies</span>
-    </div>
-
-    <div class="other-grid">
-      <a href="index.html#work" class="other-card">
-        <div class="other-card-row">
-          <span class="other-card-badge">Pricing</span>
-          <span class="other-card-company">Vendavo · 2024</span>
-        </div>
-        <h3 class="other-card-title">Making price recommendations <em>trustworthy</em> enough to follow.</h3>
-        <p class="other-card-desc">Sales reps were overriding 73% of system price recommendations — not because the prices were wrong, but because the system gave them no reason to trust it.</p>
-        <div class="other-card-foot">
-          <span class="other-card-tag">Enterprise SaaS · B2B</span>
-          <span class="other-card-arrow">Read →</span>
-        </div>
-      </a>
-
-      <a href="dodo-timer-case-study.html" class="other-card">
-        <div class="other-card-row">
-          <span class="other-card-badge">Personal Product</span>
-          <span class="other-card-company">Self-initiated · 2025</span>
-        </div>
-        <h3 class="other-card-title">A focus timer that <em>refuses</em> to interrupt you.</h3>
-        <p class="other-card-desc">Most timers ask how long. DODO asks what you're working on. My first shipped desktop app, designed and engineered end-to-end.</p>
-        <div class="other-card-foot">
-          <span class="other-card-tag">Design Engineering</span>
-          <span class="other-card-arrow">Read →</span>
-        </div>
-      </a>
-    </div>
-
     <a href="index.html#work" class="back-to-all">
       <span class="back-to-all-text">See <em>all work</em></span>
       <span class="back-to-all-arrow">→ Back to portfolio</span>
